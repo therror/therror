@@ -4,7 +4,7 @@ therror is a library created for making node error management easy, customizable
 
 [![npm version](https://badge.fury.io/js/therror.svg)](http://badge.fury.io/js/therror)
 [![Build Status](https://travis-ci.org/therror/therror.svg)](https://travis-ci.org/therror/therror)
-[![Coverage Status](https://img.shields.io/coveralls/therror/therror.svg)](https://coveralls.io/r/therror/therror)
+[![Coverage Status](https://coveralls.io/repos/therror/therror/badge.svg?branch=master)](https://coveralls.io/r/therror/therror?branch=master)
 
 therror errors are [javascript errors](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error)
 with sugar. You can use this library to create your application or library errors, and maintain fully interoperability with 
