@@ -1,0 +1,44 @@
+{
+  "name": "therror",
+  "description": "Create, document, and throw node errors easily",
+  "version": "0.2.0-beta.0",
+  "homepage": "",
+  "author": {
+    "name": "Javier Mendiara Cañardo",
+    "email": "javier.mendiaracanardo@telefonica.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/therror/therror.git"
+  },
+  "bugs": {
+    "url": "https://github.com/therror/therror/issues"
+  },
+  "main": "lib/therror",
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "scripts": {
+    "travis": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec test/environment.js test/*.spec.js && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R dot test/environment.js test/*.spec.js",
+    "lint": "jscs lib && eslint lib",
+    "test": "mocha -R spec test/environment.js test/*.spec.js",
+    "prepublish": "npm run test && npm run lint"
+  },
+  "devDependencies": {
+    "chai": "^3.0.0",
+    "coveralls": "^2.11.2",
+    "eslint": "^0.23.0",
+    "istanbul": "^0.3.15",
+    "jscs": "^1.13.1",
+    "mocha": "^2.2.5",
+    "sinon": "^1.15.0",
+    "sinon-chai": "^2.8.0"
+  },
+  "keywords": [
+    "error",
+    "i18n",
+    "node"
+  ],
+  "license": "Apache-2.0"
+}
