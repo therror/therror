@@ -6,16 +6,17 @@ therror is a library created for making node error management easy, customizable
 [![Build Status](https://travis-ci.org/therror/therror.svg)](https://travis-ci.org/therror/therror)
 [![Coverage Status](https://coveralls.io/repos/therror/therror/badge.svg?branch=master)](https://coveralls.io/r/therror/therror?branch=master)
 
-therror errors are [javascript errors](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error)
+Therror errors are [javascript errors](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error)
 with sugar. You can use this library to create your application or library errors, and maintain fully interoperability with 
 others code.
 
 The _sugar_ is: 
- * __internationalization__: Add a message in the error description, not in the error creation. Re-use and
-translate it statically, and then release a rich description in any language to the final user. 
  * __variables__: Add runtime information to your error messages
- * __extensibility__: Add as much custom information or modifications to a single error or to a set of errors as you want
+ * __extensibility__: Pure javascript Error classes with easy ES6 mixins support
+ * __nesting__: Add the parent cause to your library errors
+ * __categorization__: Super easy way to identify your throws in client code or in logs
  * __notifications__: Subscribe to events when an error is created: Log them in a single place.
+ * __internationalization__: Easy to hook your own i18n library to translate error messages
 
 With the help of their [peer projects](#peer-projects), you will have the opportunity to create a set of documents in various formats to
 satisfy the needs of several teams (operations, delivery, final users, developers, ...) but only maintaining one documentation in
@@ -26,311 +27,170 @@ the best place ever: _your source code_.
  npm install --save therror
 ```
 
-## Examples
-
-You can find a complete example in [therror-example](https://github.com/therror/therror-example) project
-
-
-### Basic example
-```js
-var therror = require('therror');
-
-var error = therror.register({
-  /*
-   * Define your error IDs as literal objects
-   * Add as much custom properties as you want. They will be available later
-   */
-  INVALID_PARAM: {
-    /**
-     * The error message
-     */
-    message: 'Parameter {1} not valid.'
-    /**
-     * The status code to return when this error is raised
-     */
-    statusCode: 400
-  }
-});
-//...
-try {
-  throw error.INVALID_PARAM('id');
-} catch(err) {
-  console.error(err); //INVALID_PARAM: Parameter id not valid.
-  res.writeHead(err.statusCode);
-}
-```
-
-### Advanced features example:
-```js
-/** filename server-errors.js */
-var therror = require('therror');
-
-/**
- * You can define several errors in namespaces, to
- * isolate functionalities
- */
-module.exports = therror.register('SERVER', {
-  INVALID_PARAM: {
-    message: 'Parameter {1} not valid.',
-    level: 'info',
-    statusCode: 400
-  }
-}, {
-  /**
-   * Define methods or properties to every error in that namespace
-   */
-  toJSON: function toJSON() {
-    return {
-      //as standard javascript errors, these properties are available and the values for the above error are
-      exceptionId: this.name,  //SERVER.INVALID_PARAM
-      //Access the error properties defined in your 'init' function
-      exceptionMessage: this.httpError + ': ' + this.message, //Bad request: Parameter id not valid
-      //you can also access other properties of the error
-      exceptionLevel: this.level
-    }
-  },
-  /**
-   * This function is called just after error instantiation.
-   * Use it to calculate things, just as a constructor
-   */
-  init: function init() {
-    this.httpError = this.level === 400 ?
-      'Bad request':
-      'Generic error';
-  }
-});
-```
+## Usage
 
 ```js
-/* filename server.js */
-var therror = require('therror');
+const Therror = require('therror');
 
-require('./server-errors');
-//can get either the exported module or retrieve errors by namespace. Nice for testing ;)
-var errors = therror.namespace('SERVER');
+// Extend Therror to create your own classes 
+class InvalidParamError extends Therror {}
 
 try {
-  throw errors.INVALID_PARAM('id');
-} catch(err) {
-  res.writeHead(err.statusCode);
-  res.json(err); //Will use the toJSON method in the err to send the response
-  /*
-   * {
-   *   "exceptionId": "SERVER.INVALID_PARAM",
-   *   "exceptionMessage": "Bad request: Parameter id not valid.",
-   *   "exceptionLevel": "info"
-   * }
-   */
-}
-```
-
-## Variables support
-Therror provides a very simple builtin template system to allow you adding
-runtime variables to the final error message.
-
-The template method searches in the `message` definition for `{x}`, where `x` is an integer > 0,
-and replaces with the corresponding serialized parameter in the error instantiation.
-
-```js
-// the ERROR message has been configured to be: 'The {1} value ({2}) is invalid';
-
-var value = 'asereje', param = 'id';
-err = ns.ERROR(param, value); //will set err.message === 'The id value (asereje) is invalid'
-```
-
-More info: `TherrorBaseError.prototype.getMessage`
-
-## Internationalization
-Thanks to the variable support and the message definition is very easy to add i18n support to your error
-messages. This library is not coupled with any tool or service, so you may use whatever technology to
-translate and then integrate the result at runtime
-
-Therror always will use your preconfigured message in development time, and does not add
-any overhead if you don't wanna translation support.
-
-Feel free to add custom i18n functions to your error namespaces or use the following verbose approach
-
-```js
-// the ERROR message has been configured to be: 'The {1} value ({2}) is invalid';
-
-try {
-  var value = 'asereje', param = 'id';
-  throw ns.ERROR(param, value);
+  // ES6 Template String syntax to have great i18n support.
+  throw new InvalidParamError('${value} is not valid value for ${id}', {value: 12, id: 'offset'});
+  // `value` and `id` are now properties of the thrown error.
+  // { [InvalidParamError: 12 is not valid value for offset] value: 12, id: 'offset' }
 } catch (err) {
-  console.log(err.message); //'The id value (asereje) is invalid'
-
-  //Search for the message in your i18n service
-  var i18nStr = i18n(err.name, currentLang); //El valor ({2}) no es válido para el parámetro {1}
-
-  console.log(err.getMessage(i18nStr)); //El valor (asereje) no es válido para el parámetro id
+  // Add cause to your errors. You can also use Therror directly
+   throw new Therror(err, `Invalid param "${err.id}"`));
+   // [Error: Invalid param "offset"]
 }
 ```
 
-You may find the [therror-doc](https://pdihub.hi.inet/javier/therror-doc) project
-very useful to automatically isolate your development messages and put in them in files ready
-to be translated and used back in your code.
+### Customizing Therror
 
-More info: `TherrorBaseError.prototype.getMessage`
-
-## Extensibility
-
-When you register errors with the `therror.register` method, you can give a customization object to
-add custom functions for errors in that namespace.
-
-If one of this functions is called `init`, it will be called after the standard error constructor, allowing
-you to customize your error instance
-
-More info: _Advanced features example_
-
-## Notifications
-Both `therror` and its created namespaces emit the `create` event whenever an event is created.
-
+**Create your own errors**
 ```js
-var therror = require('therror');
+const Therror = require('therror');
 
-require('./server-errors');
-//can get either the exported module or retrieve errors by namespace.
-var errors = therror.namespace('SERVER');
+class InvalidParamError extends Therror {
+  constructor(props) { 
+    super(props);
+    // Define the message in the class to not specify it in their instances
+    this.message = '${value} is not valid value for ${id}';
+    this.statusCode = 400;
+  }
+}
 
-//Subscribe to every therror error creations, and log them
-therror.on('create', function onError(err) {
-  console[err.level || 'info'](err.toString()); ////SERVER.INVALID_PARAM: Parameter id not valid.
-});
-
-//Subscribe only to 'SERVER' error creations, and log them
-errors.on('create', function onError(err) {
-  console[err.level || 'info'](err.httpError + '->' + err); ////Bad Request->SERVER.INVALID_PARAM: Parameter id not valid.
-});
+let err = new InvalidParamError({value: 12, id: 'offset'});
+console.log(err);
+// { [InvalidParamError: 12 is not valid value for offset] value: 12, id: 'offset', statusCode: 400 }
 ```
 
-## API
-
-__therror.register__
-
+**Add functionality to your errors by [using mixins](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Mix-ins)**
 ```js
-/**
- * Registers an error namespace in the Therror library
- *
- * @param {[String]} namespaceName Optional namespace Name where the errors will be stored
- * @param {Object} errorDescriptions Literal object with the error name and its properties
- * @param {Object} options Extra functions to be added to every error created in this namespace
- *
- * @throws {THERROR.NAMESPACE_NAME_NEEDED} if you didn't provide valid namespaceName parameter
- * @throws {THERROR.ERROR_DESCRIPTION_NEEDED} if you didn't provide valid errorDescriptions parameter
- *
- * @return {Object}  The Therror namespace with  the error factories
- */
-Therror.prototype.register = function register(namespaceName, errorDescriptions, options) { ... }
+const Therror = require('therror');
 
+let JSONError = Base => class extends Base {
+    toJSON() {
+      return {
+        name: this.name,
+        message: this.message
+      };
+    }
+};
+
+class InvalidParamError extends JSONError(Therror) {}
+let err = new InvalidParamError('${value} is not valid value for ${id}', {value: 12, id: 'offset'});
+
+console.log(JSON.stringify(err));
+ // {"name":"InvalidParamError","message":"12 is not valid value for offset"}
 ```
 
-__therror.namespace__
-
+**Namespacing your errors**: For easy identification in logs and tests using `err.name` 
 ```js
-/**
- * Retrieves a previously registered namespace errors
- *
- * @param {String} namespaceName
- * @return {Object} The Therror namespace with  the error factories
- */
-Therror.prototype.namespace = function namespace(namespaceName) { ... }
+const Therror = require('therror');
+
+// Builtin mixin in therror
+class InvalidParamError extends Therror.Namespace('Server') {}
+let err = new InvalidParamError('Not a valid parameter');
+
+console.log(err);
+// [Server.InvalidParamError: Not a valid parameter]
 ```
 
-Therror and Therror namespaces inherit from [`EventEmmiter`](http://nodejs.org/api/events.html#events_class_events_eventemitter)
-
-
-## Generated Errors API and properties
-Therror will create standard javascript errors that will have two additional methods in their prototype.
-You can override them for customizing the default behaviour when registering errors
- in a namespace using the `customization` object (see advanced examples)
-
-
-### Message generation
+**Adding error causes** 
 ```js
-/**
- * Creates a parsed message for the error
+const Therror = require('therror');
 
- * It will replace the '{x}' strings found in the msg with the stringified value
- * of the parameters passed to error instantiation
- *
- * @param {String} msg the base message to analize and introduce parameters
- * @return {String} the message
- */
-TherrorBaseError.prototype.getMessage = function getMessage(msg) { ... }
-
+try {
+  throw new Error('3rd Party error');
+} catch(err) {
+  let catchedError = new Therror(err, 'There was a problem with 3rd Party');
+  console.log(catchedError.cause());
+  // [Error: 3rd Party error]
+}
 ```
 
-### Arguments serialization
+**Notifications and logging**: Never miss again a log trace when creating Errors
 ```js
-var error = errors.SOME_ERROR('someString', new Error('fail'), objWithToJSON);
+const Therror = require('therror');
 
-/**
- * Used internally to get a string representation (serialized) of every parameter
- * passed to the error creation
- * It's called with every parameter passed to the creation of the error, i.e:
- *  'someString', new Error('fail'), objWithToJSON
- * when computing the final message of the error (available on `error.message`)
- *
- * The default implementation in the prototype understands parameters that are:
- *  - strings, returning the string value itself
- *  - undefined, returning the string 'undefined'
- *  - objects with toJSON function, returning the execution of this function
- *  - instances of Error (like Therror objects), returning its message property
- *
- * @param {Object} arg
- * @return {String}
- */
- TherrorBaseError.prototype.stringify = function stringify(arg) { ...}
+// Subscribe to error creations and log them
+Therror.on('create', console.error);
 
-//Execution examples
-error.stringify(new Error('booom')); // 'booom'
-error.stringify('someString'); // 'someString'
-error.stringify(); // 'undefined'
-error.stringify(objWithToJSON); // objWithToJSON.toJSON()
-error.stringify(obj); // obj.toString()
+let nested = new Therror('This is immediately logged');
+// [Error: This is immediately logged]
+// console.log(nested) Not miss anymore a trace cause you forgot to log it
+
+// Use an error friendly logger to not miss anything
+const logger = require('logops'); // > v1
+
+let error = new Therror(nested, 'Adding causes can save your life in production environments');
+logger.error(error);
+/*
+ERROR Error: Adding causes can save your life in production environments
+      Error: Adding causes can save your life in production environments
+          at repl:1:35
+          ... more stack
+          at REPLServer.Interface._ttyWrite (readline.js:833:16)
+      Caused by: Error: This is immediately logged
+          at repl:1:36
+          ... more stack
+          at REPLServer.Interface._ttyWrite (readline.js:826:14)
+*/
 ```
 
-### Properties
-
-An error `err` created with
-
+**Internationalization**
 ```js
- var ns = therror.register('SERVER', {
-     INVALID: {
-        message: 'Invalid value {1}'
-     }
+const Therror = require('therror');
+
+// Will be parsed by `therror-doc` and store the message for you in a JSON, ready for use your own i18n library (WIP)
+class InvalidParamError extends Therror {
+  constructor(props) { 
+    super(props);
+    this.message = '${value} is not valid value for ${id}';
+  }
+}
+
+try {
+  throw new InvalidParamError({value: 12, id: 'offset'});
+} catch (err) {
+  //i18n is your prefered library
+  //err.name === InvalidParamError
+  err.message = i18n('es-ES', err.name); // return 'El parámetro ${id} no admite como valor ${value}';
+  console.log(err);
+  // [InvalidParamError: El parámetro offset no admite como valor 12]
+}
+```
+
+**Bluebird ready**
+```js
+const Therror = require('therror');
+const Promise = require('bluebird');
+
+class InvalidParamError extends Therror {}
+
+Promise.try(() => {
+   throw new InvalidParamError('Invalid parameter');
+ })
+ .catch(InvalidParamError, err => {
+   // ...
  });
-
- var err = ns.INVALID('parameter');
 ```
 
-will have the following properties
+### Change the template library  
+Therror ships [lodash template](https://lodash.com/docs#template) system to allow you adding runtime variables to the final error message.
 
-```js
-{
-  message: 'Invalid value parameter', //computed message value on creation time
-  name: 'SERVER.INVALID' //The name of the error
-  stack: {}, // The stack trace for the error 
-  _namespace: 'SERVER', //The namespace this error belongs to
-  _type: 'INVALID', //The error type
-  _args: [ 'parameter' ], //The passed args to the error instantiation,
-  _message: 'Invalid value {1}' //original preconfigured message
-}
-```
+More info: `Therror.parse()`
 
 ## Peer Projects
-
-* [therror-doc](https://github.com/therror/therror-doc): Documentation parser for therror
-
-
-## Browser support
-
-Currently browser support is done by [browserifying](http://browserify.org/) this node code (for EventEmmiter support).
-
+* [therror-doc](https://github.com/therror/therror-doc): Documentation parser for therror (WIP)
+* [serr](https://github.com/therror/serr): Error serializer to Objects and Strings
 
 ## LICENSE
 
-Copyright 2014,2015 [Telefónica I+D](http://www.tid.es)
+Copyright 2014,2015,2016 [Telefónica I+D](http://www.tid.es)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

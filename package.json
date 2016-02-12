@@ -1,6 +1,6 @@
 {
   "name": "therror",
-  "description": "Create, document, and throw node errors easily",
+  "description": "Create, document, customize and throw node errors easily",
   "version": "0.2.0",
   "homepage": "",
   "author": {
@@ -16,29 +16,34 @@
   },
   "main": "lib/therror",
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=4"
   },
   "scripts": {
-    "travis": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec test/environment.js test/*.spec.js && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
-    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R dot test/environment.js test/*.spec.js",
+    "travis": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec test/environment.js 'test/**/*.spec.js' && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage",
+    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R dot test/environment.js 'test/**/*.spec.js'",
     "lint": "jscs lib && eslint lib",
-    "test": "mocha -R spec test/environment.js test/*.spec.js",
-    "prepublish": "npm run test && npm run lint"
+    "test": "mocha -R spec test/environment.js 'test/**/*.spec.js'"
   },
   "devDependencies": {
     "chai": "^3.0.0",
     "coveralls": "^2.11.2",
-    "eslint": "^0.23.0",
-    "istanbul": "^0.3.15",
-    "jscs": "^1.13.1",
+    "eslint": "^1.10.3",
+    "istanbul": "^0.4.2",
+    "jscs": "^2.9.0",
     "mocha": "^2.2.5",
     "sinon": "^1.15.0",
     "sinon-chai": "^2.8.0"
   },
   "keywords": [
     "error",
-    "i18n",
-    "node"
+    "properties",
+    "customizable",
+    "extensible",
+    "i18n"
   ],
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "dependencies": {
+    "lodash.template": "^4.0.2",
+    "lodash.isstring": "^4.0.0"
+  }
 }
