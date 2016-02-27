@@ -92,11 +92,28 @@ console.log(JSON.stringify(err));
 const Therror = require('therror');
 
 // Builtin mixin in therror
-class InvalidParamError extends Therror.Namespace('Server') {}
+class InvalidParamError extends Therror.Namespaced('Server') {}
 let err = new InvalidParamError('Not a valid parameter');
 
 console.log(err);
 // [Server.InvalidParamError: Not a valid parameter]
+```
+
+**Serializing your errors**: For easy logging and server returning using [serr](https://github.com/therror/serr) 
+```js
+const Therror = require('therror');
+
+// Builtin mixin in therror
+class InvalidParamError extends Therror.Serializable() {}
+let err = new InvalidParamError('Not a valid parameter');
+
+console.log('%s', err);
+// Server.InvalidParamError: Not a valid parameter
+//     at repl:1:35
+//     at REPLServer.defaultEval (repl.js:248:27) ...
+
+console.log('%j', err);
+// {"message":"Not a valid parameter","name":"InvalidParamError","constructor":"InvalidParamError"}
 ```
 
 **Adding error causes** 

@@ -238,10 +238,10 @@ describe('Therror', function() {
     });
   });
 
-  describe('when using namespaces', function() {
-    it('should be able to specify the namespace on class creation', function() {
+  describe('when using Namespaced', function() {
+    it('should be able to specify the Namespace on class creation', function() {
 
-      class MyError extends Therror.Namespace('Server') {}
+      class MyError extends Therror.Namespaced('Server') {}
 
       let err = new MyError('What a ${what}', {what: 'pitty'});
 
@@ -252,6 +252,25 @@ describe('Therror', function() {
       expect(err.namespace).to.be.eql('Server');
       expect(err.name).to.be.eql('Server.MyError');
       expect(err.message).to.be.eql('What a pitty');
+      expect(err.what).to.be.eql('pitty');
+    });
+  });
+
+  describe('when using Serializable', function() {
+    it('should have serializable methods', function() {
+
+      class MyError extends Therror.Serializable() {}
+
+      let err = new MyError('What a ${what}', {what: 'pitty'});
+
+      expect(err).to.be.instanceOf(Error);
+      expect(err).to.be.instanceOf(Therror);
+      expect(err).to.be.instanceOf(MyError);
+
+      expect(err).to.respondTo('toString');
+      expect(err).to.respondTo('toJSON');
+      expect(err.message).to.be.eql('What a pitty');
+      expect(err.what).to.be.eql('pitty');
     });
   });
 });
