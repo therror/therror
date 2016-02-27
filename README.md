@@ -12,9 +12,8 @@ others code.
 
 The _sugar_ is: 
  * __variables__: Add runtime information to your error messages
- * __extensibility__: Pure javascript Error classes with easy ES6 mixins support
+ * __extensibility__: Pure javascript Error classes with easy [ES6 mixins](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Mix-ins) support
  * __nesting__: Add the parent cause to your library errors
- * __categorization__: Super easy way to identify your throws in client code or in logs
  * __notifications__: Subscribe to events when an error is created: Log them in a single place.
  * __internationalization__: Easy to hook your own i18n library to translate error messages
 
@@ -67,6 +66,19 @@ console.log(err);
 // { [InvalidParamError: 12 is not valid value for offset] value: 12, id: 'offset', statusCode: 400 }
 ```
 
+**Adding error causes** 
+```js
+const Therror = require('therror');
+
+try {
+  throw new Error('3rd Party error');
+} catch(err) {
+  let catchedError = new Therror(err, 'There was a problem with 3rd Party');
+  console.log(catchedError.cause());
+  // [Error: 3rd Party error]
+}
+```
+
 **Add functionality to your errors by [using mixins](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Mix-ins)**
 ```js
 const Therror = require('therror');
@@ -99,35 +111,27 @@ console.log(err);
 // [Server.InvalidParamError: Not a valid parameter]
 ```
 
-**Serializing your errors**: For easy logging and server returning using [serr](https://github.com/therror/serr) 
+**Serializing your errors**: For easy logging and server returning using [serr](https://github.com/therror/serr).  
 ```js
 const Therror = require('therror');
 
 // Builtin mixin in therror
-class InvalidParamError extends Therror.Serializable() {}
-let err = new InvalidParamError('Not a valid parameter');
+class FatalError extends Therror.Serializable() {}
 
-console.log('%s', err);
-// Server.InvalidParamError: Not a valid parameter
-//     at repl:1:35
-//     at REPLServer.defaultEval (repl.js:248:27) ...
+let cause = new Error('ENOENT');
+let error = new FatalError(cause, 'Something went wrong');
 
-console.log('%j', err);
-// {"message":"Not a valid parameter","name":"InvalidParamError","constructor":"InvalidParamError"}
+console.log('%s', error);
+// FatalError: Something went wrong
+//    at repl:1:35
+//    ...
+// Caused by: Error: ENOENT
+//    at repl:1:50
+//    ...
+console.log('%j', error);
+// {"message":"Something went wrong","name":"FatalError","constructor":"FatalError","causes":[{"message":"ENOENT","name":"Error","constructor":"Error"}]}
 ```
-
-**Adding error causes** 
-```js
-const Therror = require('therror');
-
-try {
-  throw new Error('3rd Party error');
-} catch(err) {
-  let catchedError = new Therror(err, 'There was a problem with 3rd Party');
-  console.log(catchedError.cause());
-  // [Error: 3rd Party error]
-}
-```
+You can also use [logops](https://github.com/telefonicaid/logops), an error friendly logger that incorporates support off the shell for this functionality.
 
 **Notifications and logging**: Never miss again a log trace when creating Errors
 ```js
@@ -139,23 +143,6 @@ Therror.on('create', console.error);
 let nested = new Therror('This is immediately logged');
 // [Error: This is immediately logged]
 // console.log(nested) Not miss anymore a trace cause you forgot to log it
-
-// Use an error friendly logger to not miss anything
-const logger = require('logops'); // > v1
-
-let error = new Therror(nested, 'Adding causes can save your life in production environments');
-logger.error(error);
-/*
-ERROR Error: Adding causes can save your life in production environments
-      Error: Adding causes can save your life in production environments
-          at repl:1:35
-          ... more stack
-          at REPLServer.Interface._ttyWrite (readline.js:833:16)
-      Caused by: Error: This is immediately logged
-          at repl:1:36
-          ... more stack
-          at REPLServer.Interface._ttyWrite (readline.js:826:14)
-*/
 ```
 
 **Internationalization**
