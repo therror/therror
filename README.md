@@ -21,6 +21,8 @@ With the help of their [peer projects](#peer-projects), you will have the opport
 satisfy the needs of several teams (operations, delivery, final users, developers, ...) but only maintaining one documentation in
 the best place ever: _your source code_. 
 
+[Try therror online](https://tonicdev.com/npm/therror)
+
 ## Installation 
 ```bash
  npm install --save therror
