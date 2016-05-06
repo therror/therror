@@ -283,5 +283,56 @@ describe('Therror', function() {
 
       expect(eventSpy).to.have.been.calledWith(err);
     });
+  });
+
+  describe('when using Loggable', function () {
+    it('should have a log method', function() {
+      let logger = {
+        info: sandbox.spy()
+      };
+
+      class MyError extends Therror.Loggable('info') {}
+
+      let err = new MyError('What a ${what}', {what: 'pitty'});
+
+      expect(err).to.be.instanceOf(Error);
+      expect(err).to.be.instanceOf(Therror);
+      expect(err).to.be.instanceOf(MyError);
+
+      expect(err).to.respondTo('log');
+
+      expect(Therror.Loggable.logger).to.be.eql(console);
+      Therror.Loggable.logger = logger;
+      err.log();
+      Therror.Loggable.logger = console;
+
+      expect(logger.info).to.have.been.calledWith(err);
+    });
+  });
+
+  describe('when using Message', function () {
+    it('should have common message for all instances', function() {
+
+      class MyError extends Therror.Message('The user ${user} does not exists') {}
+
+      let err = new MyError({user: 'John'});
+      let err2 = new MyError(err, {user: 'Sarah'});
+
+      expect(err.message).to.be.eql('The user John does not exists');
+      expect(err2.message).to.be.eql('The user Sarah does not exists');
+      expect(err2.cause()).to.be.eql(err);
+    });
+
+    it('should be able to overwrite the predefined message', function() {
+
+      class MyError extends Therror.Message('The user ${user} does not exists') {}
+
+      let err = new MyError('Overwritten message for ${user}', {user: 'John'});
+      let err2 = new MyError(err, 'Another message for ${user}', {user: 'Sarah'});
+
+      expect(err.message).to.be.eql('Overwritten message for John');
+      expect(err2.message).to.be.eql('Another message for Sarah');
+      expect(err2.cause()).to.be.eql(err);
+    });
   })
 });

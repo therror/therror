@@ -81,7 +81,45 @@ try {
 }
 ```
 
-**Add functionality to your errors by [using mixins](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Mix-ins)**
+**Internationalization**
+```js
+const Therror = require('therror');
+
+// Will be parsed by `therror-doc` and store the message for you in a JSON, ready for use your own i18n library (WIP)
+class InvalidParamError extends Therror {
+  constructor(props) { 
+    super(props);
+    this.message = '${value} is not valid value for ${id}';
+  }
+}
+
+try {
+  throw new InvalidParamError({value: 12, id: 'offset'});
+} catch (err) {
+  //i18n is your prefered library
+  //err.name === InvalidParamError
+  err.message = i18n('es-ES', err.name); // return 'El parámetro ${id} no admite como valor ${value}';
+  console.log(err);
+  // [InvalidParamError: El parámetro offset no admite como valor 12]
+}
+```
+
+**Bluebird ready**
+```js
+const Therror = require('therror');
+const Promise = require('bluebird');
+
+class InvalidParamError extends Therror {}
+
+Promise.try(() => {
+   throw new InvalidParamError('Invalid parameter');
+ })
+ .catch(InvalidParamError, err => {
+   // ...
+ });
+```
+
+### Add functionality to your errors by [using mixins](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Mix-ins)**
 ```js
 const Therror = require('therror');
 
@@ -165,43 +203,21 @@ notFound.log();
 // INFO  NotFoundError: User Not Found
 ```
 
-**Internationalization**
+**Shared messages across all instances**: DRY. Rehuse the errors customizing only metadata
 ```js
 const Therror = require('therror');
 
-// Will be parsed by `therror-doc` and store the message for you in a JSON, ready for use your own i18n library (WIP)
-class InvalidParamError extends Therror {
-  constructor(props) { 
-    super(props);
-    this.message = '${value} is not valid value for ${id}';
-  }
-}
+class NotFoundError extends Therror.Message('The user ${user} does not exists') {}
 
-try {
-  throw new InvalidParamError({value: 12, id: 'offset'});
-} catch (err) {
-  //i18n is your prefered library
-  //err.name === InvalidParamError
-  err.message = i18n('es-ES', err.name); // return 'El parámetro ${id} no admite como valor ${value}';
-  console.log(err);
-  // [InvalidParamError: El parámetro offset no admite como valor 12]
-}
+let error = new UserNotFoundError({user: 'John'});
+
+// { [UserNotFoundError: The user John does not exists] }
+
+let error2 = new UserNotFoundError(error, {user: 'Sarah'});
+
+// { [UserNotFoundError: The user Sarah does not exists] }
 ```
 
-**Bluebird ready**
-```js
-const Therror = require('therror');
-const Promise = require('bluebird');
-
-class InvalidParamError extends Therror {}
-
-Promise.try(() => {
-   throw new InvalidParamError('Invalid parameter');
- })
- .catch(InvalidParamError, err => {
-   // ...
- });
-```
 
 ### Change the template library  
 Therror ships [lodash template](https://lodash.com/docs#template) system to allow you adding runtime variables to the final error message.
