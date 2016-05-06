@@ -34,15 +34,6 @@ describe('Therror', function() {
     expect(err.message).to.be.eql('Something happened');
   });
 
-  it('should receive an event when a Therror is instantiated', function() {
-    let eventSpy = sandbox.spy();
-    Therror.on('create', eventSpy);
-
-    let err = new Therror();
-
-    expect(eventSpy).to.have.been.calledWith(err);
-  });
-
   describe('when specifying properties in the instantiation', function() {
 
     it('should support adding properties to the error instance', function() {
@@ -273,4 +264,17 @@ describe('Therror', function() {
       expect(err.what).to.be.eql('pitty');
     });
   });
+
+  describe('when using Notificator', function () {
+    it('should receive an event when a Therror is instantiated', function() {
+      let eventSpy = sandbox.spy();
+      Therror.on('create', eventSpy);
+
+      class MyError extends Therror.Notificator() {}
+
+      let err = new MyError();
+
+      expect(eventSpy).to.have.been.calledWith(err);
+    });
+  })
 });

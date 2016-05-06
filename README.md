@@ -142,9 +142,11 @@ const Therror = require('therror');
 // Subscribe to error creations and log them
 Therror.on('create', console.error);
 
-let nested = new Therror('This is immediately logged');
+class FatalError extends Therror.Notificator() {}
+
+let fatal = new FatalError('This is immediately logged');
 // [Error: This is immediately logged]
-// console.log(nested) Not miss anymore a trace cause you forgot to log it
+// console.log(fatal) Not miss anymore a trace cause you forgot to log it
 ```
 
 **Internationalization**
