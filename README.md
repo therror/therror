@@ -135,7 +135,7 @@ console.log('%j', error);
 ```
 You can also use [logops](https://github.com/telefonicaid/logops), an error friendly logger that incorporates support off the shell for this functionality.
 
-**Notifications and logging**: Never miss again a log trace when creating Errors
+**Notifications**: Never miss again a log trace when creating Errors
 ```js
 const Therror = require('therror');
 
@@ -147,6 +147,22 @@ class FatalError extends Therror.Notificator() {}
 let fatal = new FatalError('This is immediately logged');
 // [Error: This is immediately logged]
 // console.log(fatal) Not miss anymore a trace cause you forgot to log it
+```
+
+**Logging levels**: Cause not all errors have the same severity. Preconfigure them with it
+```js
+const Therror = require('therror');
+
+// Set your favourite logger (defaults to console)
+Therror.Loggable.logger = require('logops');
+
+class NotFoundError extends Therror.Loggable('info') {}
+
+let notFound = new NotFoundError('User Not found');
+
+notFound.log();
+// calls logger.info(notFound)
+// INFO  NotFoundError: User Not Found
 ```
 
 **Internationalization**

@@ -8,12 +8,21 @@ let simple = new Therror('Simple');
 let medium = new Therror('With ${property}', {property: 'things'});
 let causes = new Therror(simple, 'With causes');
 
-function ServerErrorMixin() {
-  return Therror.Notificator(Therror.Serializable(Therror.Namespaced('Server')));
+function ServerErrorMixin(level) {
+  return  Therror.Notificator(
+            Therror.Serializable(
+              Therror.Namespaced('Server',
+                Therror.Loggable(level)
+          )));
 }
 
-class CustomError extends ServerErrorMixin() {}
+class ServerError extends ServerErrorMixin('info') {}
 
 Therror.on('create', logger.error);
+Therror.Loggable.logger = logger;
 
-let custom = new CustomError(medium, 'My fancy custom error with ${foo}', {foo: 'bar'});
+let custom = new ServerError(medium, 'My fancy custom error with ${foo}', {foo: 'bar'});
+if (custom.isTherror) {
+  custom.log();
+}
+
