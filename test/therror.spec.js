@@ -34,6 +34,13 @@ describe('Therror', function() {
     expect(err.message).to.be.eql('Something happened');
   });
 
+  it('should be easy to identify Therrors using flag isTherror', function() {
+    let cause = new Error('Causer error');
+    let err = new Therror(cause);
+
+    expect(err.isTherror).to.be.eql(true);
+  });
+
   describe('when specifying properties in the instantiation', function() {
 
     it('should support adding properties to the error instance', function() {
