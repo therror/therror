@@ -29,4 +29,3 @@ let custom = new ServerError(medium, {foo: 'bar'});
 if (custom.isTherror) {
   custom.log();
 }
-

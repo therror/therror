@@ -44,8 +44,7 @@
   "license": "Apache-2.0",
   "tonicExampleFilename": "examples/tonicdev.js",
   "dependencies": {
-    "lodash.isstring": "^4.0.0",
-    "lodash.template": "^4.0.2",
+    "lodash": "^4.0.0",
     "serr": "^0.2.0"
   }
 }

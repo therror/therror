@@ -48,8 +48,6 @@ try {
 }
 ```
 
-### Customizing Therror
-
 **Create your own errors**
 ```js
 const Therror = require('therror');
@@ -78,6 +76,82 @@ try {
   let catchedError = new Therror(err, 'There was a problem with 3rd Party');
   console.log(catchedError.cause());
   // [Error: 3rd Party error]
+}
+```
+
+**HTTP Error classes**
+```js
+let err = new Therror.HTTP.NotFound('The user ${user} does not exists', {user: 'Sarah'});
+
+res.statusCode(err.statusCode()) // 404
+res.json(err.toPayload())
+// {
+//    error: 'NotFound',
+//    message: 'The user Sarah does not exists'
+// }
+```
+
+`toPayload()` method is meant to get the final response to the client. 
+When the error `statusCode >= 500`, it will set in the payload response
+a generic response to hide the implementation details to the user, while
+having the original properties untouched to log the error as it was defined
+
+```
+let err = new Therror.HTTP.ServiceUnavailable('BD Misconfigured');
+
+console.log(err); // [ServiceUnavailable: BD Misconfigured]
+
+// Send a hidden response to the client (Express example)
+res.statusCode(err.statusCode()) // 503
+res.json(err.toPayload())
+// {
+//    error: 'InternalServerError',
+//    message: 'An internal server error occurred'
+// }
+```
+
+The following classes have been defined in `Therror.HTTP`
+```js
+{
+     '400': 'BadRequest',
+     '401': 'Unauthorized',
+     '402': 'PaymentRequired',
+     '403': 'Forbidden',
+     '404': 'NotFound',
+     '405': 'MethodNotAllowed',
+     '406': 'NotAcceptable',
+     '407': 'ProxyAuthentication Required',
+     '408': 'RequestTimeout',
+     '409': 'Conflict',
+     '410': 'Gone',
+     '411': 'LengthRequired',
+     '412': 'PreconditionFailed',
+     '413': 'RequestEntityTooLarge',
+     '414': 'RequestUriTooLarge',
+     '415': 'UnsupportedMediaType',
+     '416': 'RequestedRangeNotSatisfiable',
+     '417': 'ExpectationFailed',
+     '418': 'ImATeapot',
+     '422': 'UnprocessableEntity',
+     '423': 'Locked',
+     '424': 'FailedDependency',
+     '425': 'UnorderedCollection',
+     '426': 'UpgradeRequired',
+     '428': 'PreconditionRequired',
+     '429': 'TooManyRequests',
+     '431': 'RequestHeaderFieldsTooLarge',
+     '451': 'UnavailableForLegalReasons',
+     '500': 'InternalServerError',
+     '501': 'NotImplemented',
+     '502': 'BadGateway',
+     '503': 'ServiceUnavailable',
+     '504': 'GatewayTimeout',
+     '505': 'HTTPVersionNotSupported',
+     '506': 'VariantAlsoNegotiates',
+     '507': 'InsufficientStorage',
+     '509': 'BandwidthLimitExceeded',
+     '510': 'NotExtended',
+     '511': 'NetworkAuthenticationRequired' 
 }
 ```
 
@@ -154,16 +228,35 @@ let error2 = new UserNotFoundError(error, {user: 'Sarah'});
 // { [UserNotFoundError: The user Sarah does not exists] }
 ```
 
-**Namespacing your errors**: For easy identification in logs and tests using `err.name` 
+**Custom HTTP Errors**: Be expressive with your Server errors
 ```js
 const Therror = require('therror');
 
-// Builtin mixin in therror
-class InvalidParamError extends Therror.Namespaced('Server') {}
-let err = new InvalidParamError('Not a valid parameter');
+class UserNotFound extends Therror.HTTP('404') {}
 
-console.log(err);
-// [Server.InvalidParamError: Not a valid parameter]
+let err = new UserNotFound('The user ${user} does not exists', {user: 'Sarah'});
+
+// Send the response (Express example)
+res.statusCode(err.statusCode()) // 404
+res.json(err.toPayload())
+// {
+//    error: 'UserNotFound',
+//    message: 'The user Sarah does not exists'
+// }
+
+class DatabaseError extends Therror.HTTP('503') {}
+
+let err = new DatabaseError(cause, 'BD Misconfigured');
+
+console.log(err); // [DatabaseError: BD Misconfigured]
+
+// Send a hidden response to the client (Express example)
+res.statusCode(err.statusCode()) // 503
+res.json(err.toPayload())
+// {
+//    error: 'InternalServerError',
+//    message: 'An internal server error occurred'
+// }
 ```
 
 **Serializing your errors**: For easy logging and server returning using [serr](https://github.com/therror/serr).  
@@ -219,6 +312,18 @@ notFound.log();
 
 notFound.level();
 // info
+```
+ 
+**Namespacing your errors**: For easy identification in logs and tests using `err.name` 
+```js
+const Therror = require('therror');
+
+// Builtin mixin in therror
+class InvalidParamError extends Therror.Namespaced('Server') {}
+let err = new InvalidParamError('Not a valid parameter');
+
+console.log(err);
+// [Server.InvalidParamError: Not a valid parameter]
 ```
 
 ### Change the template library  

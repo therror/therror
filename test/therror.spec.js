@@ -337,5 +337,98 @@ describe('Therror', function() {
       expect(err2.message).to.be.eql('Another message for Sarah');
       expect(err2.cause()).to.be.eql(err);
     });
-  })
+  });
+
+  describe('when using HTTP', function () {
+    it('should create with statusCodes', function() {
+
+      class NotFound extends Therror.HTTP('404') {}
+      class ServerError extends Therror.HTTP('500') {}
+
+      let err = new NotFound();
+      let err2 = new ServerError(err, 'Boom!');
+
+      expect(err).to.respondTo('statusCode');
+      expect(err).to.respondTo('toPayload');
+
+      expect(err.statusCode()).to.be.eql(404);
+      expect(err.message).to.be.eql('Not Found');
+      expect(err.toPayload()).to.be.eql({
+        error: 'NotFound',
+        message: 'Not Found'
+      });
+
+      expect(err2.cause()).to.be.eql(err);
+      expect(err2.message).to.be.eql('Boom!');
+
+    });
+
+    it('should create with custom message', function() {
+
+      class UserNotFound extends Therror.HTTP('404') {}
+
+      let err = new UserNotFound('The user ${user} does not exists', {user: 'Sarah'});
+
+      expect(err).to.respondTo('statusCode');
+      expect(err).to.respondTo('toPayload');
+
+      expect(err.statusCode()).to.be.eql(404);
+      expect(err.message).to.be.eql('The user Sarah does not exists');
+      expect(err.toPayload()).to.be.eql({
+        error: 'UserNotFound',
+        message: 'The user Sarah does not exists'
+      });
+    });
+
+    it('should have precreated classes for statusCodes', function() {
+
+      let err = new Therror.HTTP.NotFound('The user ${user} does not exists', {user: 'Sarah'});
+
+      expect(err).to.respondTo('statusCode');
+      expect(err).to.respondTo('toPayload');
+
+      expect(err.statusCode()).to.be.eql(404);
+      expect(err.message).to.be.eql('The user Sarah does not exists');
+      expect(err.toPayload()).to.be.eql({
+        error: 'NotFound',
+        message: 'The user Sarah does not exists'
+      });
+    });
+
+    it('should hide information to the client', function() {
+      let err = new Therror.HTTP.ServiceUnavailable('Database ${type} misconfigured', {type: 'mongo'});
+
+      expect(err).to.respondTo('statusCode');
+      expect(err).to.respondTo('toPayload');
+
+      expect(err.statusCode()).to.be.eql(503);
+      expect(err.name).to.be.eql('ServiceUnavailable');
+      expect(err.message).to.be.eql('Database mongo misconfigured');
+      expect(err.toPayload()).to.be.eql({
+        error: 'InternalServerError',
+        message: 'An internal server error occurred'
+      });
+    });
+
+    it('should use generic 500 message when not valid statusCode', function() {
+      class ServerError extends Therror.HTTP(2312332) {}
+
+      let err = new ServerError();
+      let err2 = new ServerError('Boom!');
+
+      expect(err.statusCode()).to.be.eql(2312332);
+      expect(err.message).to.be.eql('Internal Server Error');
+      expect(err2.message).to.be.eql('Boom!');
+
+      expect(err.toPayload()).to.be.eql({
+        error: 'InternalServerError',
+        message: 'An internal server error occurred'
+      });
+
+      expect(err2.toPayload()).to.be.eql({
+        error: 'InternalServerError',
+        message: 'An internal server error occurred'
+      });
+    });
+  });
 });
