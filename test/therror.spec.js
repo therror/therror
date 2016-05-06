@@ -300,6 +300,9 @@ describe('Therror', function() {
       expect(err).to.be.instanceOf(MyError);
 
       expect(err).to.respondTo('log');
+      expect(err).to.respondTo('level');
+
+      expect(err.level()).to.be.eql('info');
 
       expect(Therror.Loggable.logger).to.be.eql(console);
       Therror.Loggable.logger = logger;

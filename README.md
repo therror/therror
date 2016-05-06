@@ -201,6 +201,9 @@ let notFound = new NotFoundError('User Not found');
 notFound.log();
 // calls logger.info(notFound)
 // INFO  NotFoundError: User Not Found
+
+notFound.level();
+// info
 ```
 
 **Shared messages across all instances**: DRY. Rehuse the errors customizing only metadata
