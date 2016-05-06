@@ -313,10 +313,10 @@ describe('Therror', function() {
     });
   });
 
-  describe('when using Message', function () {
+  describe('when using WithMessage', function () {
     it('should have common message for all instances', function() {
 
-      class MyError extends Therror.Message('The user ${user} does not exists') {}
+      class MyError extends Therror.WithMessage('The user ${user} does not exists') {}
 
       let err = new MyError({user: 'John'});
       let err2 = new MyError(err, {user: 'Sarah'});
@@ -328,7 +328,7 @@ describe('Therror', function() {
 
     it('should be able to overwrite the predefined message', function() {
 
-      class MyError extends Therror.Message('The user ${user} does not exists') {}
+      class MyError extends Therror.WithMessage('The user ${user} does not exists') {}
 
       let err = new MyError('Overwritten message for ${user}', {user: 'John'});
       let err2 = new MyError(err, 'Another message for ${user}', {user: 'Sarah'});

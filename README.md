@@ -139,6 +139,21 @@ console.log(JSON.stringify(err));
  // {"name":"InvalidParamError","message":"12 is not valid value for offset"}
 ```
 
+**Shared messages across all instances**: DRY. Rehuse the errors customizing only metadata
+```js
+const Therror = require('therror');
+
+class NotFoundError extends Therror.WithMessage('The user ${user} does not exists') {}
+
+let error = new UserNotFoundError({user: 'John'});
+
+// { [UserNotFoundError: The user John does not exists] }
+
+let error2 = new UserNotFoundError(error, {user: 'Sarah'});
+
+// { [UserNotFoundError: The user Sarah does not exists] }
+```
+
 **Namespacing your errors**: For easy identification in logs and tests using `err.name` 
 ```js
 const Therror = require('therror');
@@ -205,22 +220,6 @@ notFound.log();
 notFound.level();
 // info
 ```
-
-**Shared messages across all instances**: DRY. Rehuse the errors customizing only metadata
-```js
-const Therror = require('therror');
-
-class NotFoundError extends Therror.Message('The user ${user} does not exists') {}
-
-let error = new UserNotFoundError({user: 'John'});
-
-// { [UserNotFoundError: The user John does not exists] }
-
-let error2 = new UserNotFoundError(error, {user: 'Sarah'});
-
-// { [UserNotFoundError: The user Sarah does not exists] }
-```
-
 
 ### Change the template library  
 Therror ships [lodash template](https://lodash.com/docs#template) system to allow you adding runtime variables to the final error message.

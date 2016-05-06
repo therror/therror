@@ -13,7 +13,7 @@ function ServerErrorMixin(opt) {
             Therror.Serializable(
               Therror.Namespaced('Server',
                 Therror.Loggable(opt.level || 'info',
-                  Therror.Message(opt.message
+                  Therror.WithMessage(opt.message
           )))));
 }
 
