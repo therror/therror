@@ -16,6 +16,7 @@ The _sugar_ is:
  * __nesting__: Add the parent cause to your library errors
  * __notifications__: Subscribe to events when an error is created: Log them in a single place.
  * __internationalization__: Easy to hook your own i18n library to translate error messages
+ * __predefined http errors__: Standard HTTP Error classes for quick programming
 
 With the help of their [peer projects](#peer-projects), you will have the opportunity to create a set of documents in various formats to
 satisfy the needs of several teams (operations, delivery, final users, developers, ...) but only maintaining one documentation in
@@ -48,7 +49,7 @@ try {
 }
 ```
 
-**Create your own errors**
+### Create your own errors
 ```js
 const Therror = require('therror');
 
@@ -66,7 +67,7 @@ console.log(err);
 // { [InvalidParamError: 12 is not valid value for offset] value: 12, id: 'offset', statusCode: 400 }
 ```
 
-**Adding error causes** 
+### Adding error causes 
 ```js
 const Therror = require('therror');
 
@@ -79,7 +80,7 @@ try {
 }
 ```
 
-**HTTP Error classes**
+### HTTP Error classes
 ```js
 let err = new Therror.HTTP.NotFound('The user ${user} does not exists', {user: 'Sarah'});
 
@@ -155,7 +156,7 @@ The following classes have been defined in `Therror.HTTP`
 }
 ```
 
-**Internationalization**
+### Internationalization
 ```js
 const Therror = require('therror');
 
@@ -178,7 +179,7 @@ try {
 }
 ```
 
-**Bluebird ready**
+### Bluebird ready
 ```js
 const Therror = require('therror');
 const Promise = require('bluebird');
@@ -197,23 +198,29 @@ Promise.try(() => {
 ```js
 const Therror = require('therror');
 
-let JSONError = Base => class extends Base {
-    toJSON() {
-      return {
-        name: this.name,
-        message: this.message
-      };
-    }
-};
+// All Predefined Mixins support
+function ServerError(opt) {
+  return  Therror.Notificator( // emit events on error creations
+            Therror.Serializable( // add toString/toJSON methods with rich information
+              Therror.Namespaced('Server', // classify your errors
+                Therror.Loggable(opt.level, // make easy logging
+                  Therror.WithMessage(opt.message, // Specify message on classes instead of instances
+                    Therror.HTTP(opt.statusCode // make this error an HTTP one
+          ))))));
+}
 
-class InvalidParamError extends JSONError(Therror) {}
-let err = new InvalidParamError('${value} is not valid value for ${id}', {value: 12, id: 'offset'});
+class UserNotFound extends ServerError({
+  message: 'User ${username} does not exists',
+  level: 'info',
+  statusCode: 404
+}){}
 
-console.log(JSON.stringify(err));
- // {"name":"InvalidParamError","message":"12 is not valid value for offset"}
+let err = new UserNotFound({ username: 'John Doe' });
+
 ```
 
-**Shared messages across all instances**: DRY. Rehuse the errors customizing only metadata
+#### Shared messages across all instances
+DRY. Rehuse the errors customizing only metadata
 ```js
 const Therror = require('therror');
 
@@ -228,7 +235,8 @@ let error2 = new UserNotFoundError(error, {user: 'Sarah'});
 // { [UserNotFoundError: The user Sarah does not exists] }
 ```
 
-**Custom HTTP Errors**: Be expressive with your Server errors
+#### Custom HTTP Errors
+Be expressive with your Server errors
 ```js
 const Therror = require('therror');
 
@@ -259,7 +267,8 @@ res.json(err.toPayload())
 // }
 ```
 
-**Serializing your errors**: For easy logging and server returning using [serr](https://github.com/therror/serr).  
+#### Serializing your errors
+For easy logging and server returning using [serr](https://github.com/therror/serr).  
 ```js
 const Therror = require('therror');
 
@@ -281,7 +290,8 @@ console.log('%j', error);
 ```
 You can also use [logops](https://github.com/telefonicaid/logops), an error friendly logger that incorporates support off the shell for this functionality.
 
-**Notifications**: Never miss again a log trace when creating Errors
+#### Notifications
+Never miss again a log trace when creating Errors
 ```js
 const Therror = require('therror');
 
@@ -295,7 +305,8 @@ let fatal = new FatalError('This is immediately logged');
 // console.log(fatal) Not miss anymore a trace cause you forgot to log it
 ```
 
-**Logging levels**: Cause not all errors have the same severity. Preconfigure them with it
+#### Logging levels
+Cause not all errors have the same severity. Preconfigure them with it
 ```js
 const Therror = require('therror');
 
@@ -314,7 +325,8 @@ notFound.level();
 // info
 ```
  
-**Namespacing your errors**: For easy identification in logs and tests using `err.name` 
+#### Namespacing your errors
+For easy identification in logs and tests using `err.name` 
 ```js
 const Therror = require('therror');
 
