@@ -97,7 +97,7 @@ When the error `statusCode >= 500`, it will set in the payload response
 a generic response to hide the implementation details to the user, while
 having the original properties untouched to log the error as it was defined
 
-```
+```js
 let err = new Therror.HTTP.ServiceUnavailable('BD Misconfigured');
 
 console.log(err); // [ServiceUnavailable: BD Misconfigured]
@@ -194,7 +194,7 @@ Promise.try(() => {
  });
 ```
 
-### Add functionality to your errors by [using mixins](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Mix-ins)**
+### Add functionality to your errors by [using mixins](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Mix-ins)
 ```js
 const Therror = require('therror');
 
