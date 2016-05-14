@@ -27,9 +27,9 @@
   "devDependencies": {
     "chai": "^3.0.0",
     "coveralls": "^2.11.2",
-    "eslint": "^1.10.3",
+    "eslint": "^2.10.1",
     "istanbul": "^0.4.2",
-    "jscs": "^2.9.0",
+    "jscs": "^3.0.3",
     "mocha": "^2.2.5",
     "sinon": "^1.15.0",
     "sinon-chai": "^2.8.0"
