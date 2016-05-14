@@ -2,6 +2,8 @@
 
 therror is a library created for making node error management easy, customizable, interoperable and documentable.
 
+It's written in ES6, for node >= 4 
+
 [![npm version](https://badge.fury.io/js/therror.svg)](http://badge.fury.io/js/therror)
 [![Build Status](https://travis-ci.org/therror/therror.svg)](https://travis-ci.org/therror/therror)
 [![Coverage Status](https://coveralls.io/repos/therror/therror/badge.svg?branch=master)](https://coveralls.io/r/therror/therror?branch=master)
@@ -195,28 +197,17 @@ Promise.try(() => {
 ```
 
 ### Add functionality to your errors by [using mixins](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Mix-ins)
+
+#### ServerErrors
+Common use case for your Server Error. Includes Therror.Notificator, Therror.Loggable, Therror.WithMessage and Therror.HTTP mixins
 ```js
-const Therror = require('therror');
-
-// All Predefined Mixins support
-function ServerError(opt) {
-  return  Therror.Notificator( // emit events on error creations
-            Therror.Serializable( // add toString/toJSON methods with rich information
-              Therror.Namespaced('Server', // classify your errors
-                Therror.Loggable(opt.level, // make easy logging
-                  Therror.WithMessage(opt.message, // Specify message on classes instead of instances
-                    Therror.HTTP(opt.statusCode // make this error an HTTP one
-          ))))));
-}
-
-class UserNotFound extends ServerError({
+class UserNotFound extends Therror.ServerError({
   message: 'User ${username} does not exists',
   level: 'info',
   statusCode: 404
 }){}
 
-let err = new UserNotFound({ username: 'John Doe' });
-
+let error =  new UserNotFound({username: 'John Doe'});
 ```
 
 #### Shared messages across all instances
