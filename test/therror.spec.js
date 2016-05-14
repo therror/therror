@@ -431,4 +431,41 @@ describe('Therror', function() {
       });
     });
   });
+
+  describe('when using ServerError', function () {
+    it('should have the four mixins', function() {
+
+      let eventSpy = sandbox.spy();
+      Therror.on('create', eventSpy);
+
+      class MyError extends Therror.ServerError({
+        level: 'info',
+        statusCode: 404,
+        message: 'The user is ${user}'
+      }) {}
+
+      let cause = new Therror();
+
+      let err = new MyError(cause, {user: 'John'});
+
+      expect(err.user).to.be.eql('John');
+      expect(err.cause()).to.be.eql(cause);
+      expect(err.message).to.be.eql('The user is John');
+      expect(err.level()).to.be.eql('info');
+      expect(err.statusCode()).to.be.eql(404);
+      expect(eventSpy).to.have.been.calledWith(err);
+    });
+
+    it('should use defaults', function() {
+      class MyError extends Therror.ServerError() {}
+      let cause = new Therror();
+      let err = new MyError(cause, {user: 'John'});
+
+      expect(err.user).to.be.eql('John');
+      expect(err.cause()).to.be.eql(cause);
+      expect(err.message).to.be.eql('Service Unavailable');
+      expect(err.level()).to.be.eql('error');
+      expect(err.statusCode()).to.be.eql(503);
+    });
+  });
 });

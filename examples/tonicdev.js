@@ -1,40 +1,28 @@
 'use strict';
 const Therror = require('therror');
-const logger = require('logops');
-logger.format = logger.formatters.dev;
 
 class CustomError extends Therror {
   constructor(cause, msg, props) {
     super(cause, msg, props);
-    this.customProperty = 'MyCustom'
+    this.DB = 'Users';
   }
 }
 
-try {
-  throw new Therror('User ${username} does not exists', {username: 'John Doe'});
-} catch(err) {
-  let custom = new CustomError(err, 'Something failed');
-  console.log(custom, 'Caused by', custom.cause());
-}
-
-
-// ES6  Mixins support
-function ServerError(opt) {
-  return  Therror.Notificator( // emit events on error creations
-            Therror.Serializable( // add toString/toJSON methods with rich information
-              Therror.Namespaced('Server', // classify your errors
-                Therror.Loggable(opt.level, // make easy logging
-                  Therror.WithMessage(opt.message, // Specify message on classes instead of instances
-                    Therror.HTTP(opt.statusCode // make this error an HTTP one
-          ))))));
-}
-
-class UserNotFound extends ServerError({
+class UserNotFound extends Therror.ServerError({
   message: 'User ${username} does not exists',
   level: 'info',
   statusCode: 404
 }){}
 
+let simpleError = new Therror('With Runtime Properties', { criteria: 'John Doe' });
+console.log(simpleError.criteria); // "John Doe"
 
-logger.error(new UserNotFound({ username: 'John Doe' });
+let customError = new CustomError(simpleError, 'With Causes');
+console.log(customError.cause()); // { [Error: With Runtime Properties] criteria: 'John Doe' }
+console.log(customError.DB); // Users
 
+let mixinError = new UserNotFound({username: 'John Doe'});
+console.log(mixinError.toPayload()); // { error: 'UserNotFound', message: 'User John Doe does not exists' }
+console.log(mixinError.statusCode()); // 404
+console.log(mixinError.level()); // info
+mixinError.log(); // { [UserNotFound: User John Doe does not exists] username: 'John Doe' }
