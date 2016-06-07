@@ -7,9 +7,9 @@ chai.use(sinonChai);
 global.expect = chai.expect;
 
 beforeEach(function(){
-  global.sinon = sinon.sandbox.create();
+  global.sandbox = sinon.sandbox.create();
 });
 
 afterEach(function(){
-  global.sinon.restore();
+  global.sandbox.restore();
 });

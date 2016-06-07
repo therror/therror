@@ -9,3 +9,5 @@ npm-debug.log
 .jscsrc
 .travis.yml
 CONTRIBUTING.md
+
+*.spec.js
