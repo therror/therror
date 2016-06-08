@@ -348,10 +348,11 @@ describe('Therror', function() {
       let err = new NotFound();
       let err2 = new ServerError(err, 'Boom!');
 
-      expect(err).to.respondTo('statusCode');
+      expect(err.statusCode).to.exist;
+      expect(Object.keys(err)).to.not.contains('statusCode');
       expect(err).to.respondTo('toPayload');
 
-      expect(err.statusCode()).to.be.eql(404);
+      expect(err.statusCode).to.be.eql(404);
       expect(err.message).to.be.eql('Not Found');
       expect(err.toPayload()).to.be.eql({
         error: 'NotFound',
@@ -369,10 +370,7 @@ describe('Therror', function() {
 
       let err = new UserNotFound('The user ${user} does not exists', {user: 'Sarah'});
 
-      expect(err).to.respondTo('statusCode');
-      expect(err).to.respondTo('toPayload');
-
-      expect(err.statusCode()).to.be.eql(404);
+      expect(err.statusCode).to.be.eql(404);
       expect(err.message).to.be.eql('The user Sarah does not exists');
       expect(err.toPayload()).to.be.eql({
         error: 'UserNotFound',
@@ -384,10 +382,7 @@ describe('Therror', function() {
 
       let err = new Therror.HTTP.NotFound('The user ${user} does not exists', {user: 'Sarah'});
 
-      expect(err).to.respondTo('statusCode');
-      expect(err).to.respondTo('toPayload');
-
-      expect(err.statusCode()).to.be.eql(404);
+      expect(err.statusCode).to.be.eql(404);
       expect(err.message).to.be.eql('The user Sarah does not exists');
       expect(err.toPayload()).to.be.eql({
         error: 'NotFound',
@@ -398,10 +393,7 @@ describe('Therror', function() {
     it('should hide information to the client', function() {
       let err = new Therror.HTTP.ServiceUnavailable('Database ${type} misconfigured', {type: 'mongo'});
 
-      expect(err).to.respondTo('statusCode');
-      expect(err).to.respondTo('toPayload');
-
-      expect(err.statusCode()).to.be.eql(503);
+      expect(err.statusCode).to.be.eql(503);
       expect(err.name).to.be.eql('ServiceUnavailable');
       expect(err.message).to.be.eql('Database mongo misconfigured');
       expect(err.toPayload()).to.be.eql({
@@ -416,7 +408,7 @@ describe('Therror', function() {
       let err = new ServerError();
       let err2 = new ServerError('Boom!');
 
-      expect(err.statusCode()).to.be.eql(2312332);
+      expect(err.statusCode).to.be.eql(2312332);
       expect(err.message).to.be.eql('Internal Server Error');
       expect(err2.message).to.be.eql('Boom!');
 
@@ -452,7 +444,7 @@ describe('Therror', function() {
       expect(err.cause()).to.be.eql(cause);
       expect(err.message).to.be.eql('The user is John');
       expect(err.level()).to.be.eql('info');
-      expect(err.statusCode()).to.be.eql(404);
+      expect(err.statusCode).to.be.eql(404);
       expect(eventSpy).to.have.been.calledWith(err);
     });
 
@@ -465,7 +457,7 @@ describe('Therror', function() {
       expect(err.cause()).to.be.eql(cause);
       expect(err.message).to.be.eql('Service Unavailable');
       expect(err.level()).to.be.eql('error');
-      expect(err.statusCode()).to.be.eql(503);
+      expect(err.statusCode).to.be.eql(503);
     });
   });
 });

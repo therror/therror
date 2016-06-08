@@ -86,7 +86,7 @@ try {
 ```js
 let err = new Therror.HTTP.NotFound('The user ${user} does not exists', {user: 'Sarah'});
 
-res.statusCode(err.statusCode()) // 404
+res.statusCode(err.statusCode) // 404
 res.json(err.toPayload())
 // {
 //    error: 'NotFound',
@@ -105,7 +105,7 @@ let err = new Therror.HTTP.ServiceUnavailable('BD Misconfigured');
 console.log(err); // [ServiceUnavailable: BD Misconfigured]
 
 // Send a hidden response to the client (Express example)
-res.statusCode(err.statusCode()) // 503
+res.statusCode(err.statusCode) // 503
 res.json(err.toPayload())
 // {
 //    error: 'InternalServerError',
@@ -236,7 +236,7 @@ class UserNotFound extends Therror.HTTP('404') {}
 let err = new UserNotFound('The user ${user} does not exists', {user: 'Sarah'});
 
 // Send the response (Express example)
-res.statusCode(err.statusCode()) // 404
+res.statusCode(err.statusCode) // 404
 res.json(err.toPayload())
 // {
 //    error: 'UserNotFound',
@@ -250,7 +250,7 @@ let err = new DatabaseError(cause, 'BD Misconfigured');
 console.log(err); // [DatabaseError: BD Misconfigured]
 
 // Send a hidden response to the client (Express example)
-res.statusCode(err.statusCode()) // 503
+res.statusCode(err.statusCode) // 503
 res.json(err.toPayload())
 // {
 //    error: 'InternalServerError',
