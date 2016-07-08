@@ -459,5 +459,30 @@ describe('Therror', function() {
       expect(err.level()).to.be.eql('error');
       expect(err.statusCode).to.be.eql(503);
     });
+
+    it('should have precreated classes for statusCodes', function() {
+
+      let err = new Therror.ServerError.NotFound('The user ${user} does not exists', {user: 'Sarah'});
+
+      expect(err.statusCode).to.be.eql(404);
+      expect(err.message).to.be.eql('The user Sarah does not exists');
+      expect(err.toPayload()).to.be.eql({
+        error: 'NotFound',
+        message: 'The user Sarah does not exists'
+      });
+
+    });
+
+    it('should hide information to the client', function() {
+      let err = new Therror.ServerError.ServiceUnavailable('Database ${type} misconfigured', {type: 'mongo'});
+
+      expect(err.statusCode).to.be.eql(503);
+      expect(err.name).to.be.eql('ServiceUnavailable');
+      expect(err.message).to.be.eql('Database mongo misconfigured');
+      expect(err.toPayload()).to.be.eql({
+        error: 'InternalServerError',
+        message: 'An internal server error occurred'
+      });
+    });
   });
 });
