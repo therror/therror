@@ -19,26 +19,89 @@ describe('Therror', function() {
     expect(err.message).to.be.eql('Something happened');
   });
 
-  it('should be able to create a Therror with cause', function() {
-    let cause = new Error('Causer error');
-    let err = new Therror(cause);
-
-    expect(err.cause()).to.be.eql(cause);
-  });
-
-  it('should be able to create a Therror with cause and message', function() {
-    let cause = new Error('Causer error');
-    let err = new Therror(cause, 'Something happened');
-
-    expect(err.cause()).to.be.eql(cause);
-    expect(err.message).to.be.eql('Something happened');
-  });
-
   it('should be easy to identify Therrors using flag isTherror', function() {
-    let cause = new Error('Causer error');
-    let err = new Therror(cause);
+    let err = new Therror('Something happened');
 
     expect(err.isTherror).to.be.eql(true);
+  });
+
+  it('should be able to accept Numbers as message', function() {
+    let cause = 1;
+    let err = new Therror(cause);
+
+    expect(err.message).to.be.eql(String(cause));
+  });
+
+  it('should be able to accept Objects on construction', function() {
+    let cause = {
+      badDeveloper: true
+    };
+    let err = new Therror(cause);
+
+    expect(err.message).to.be.eql('Unknown error');
+    expect(err).to.have.property('badDeveloper', true);
+  });
+
+  it('should be able to accept Objects on construction with a message', function() {
+    let cause = {
+      badDeveloper: true,
+      message: 'Really bad error'
+    };
+    let err = new Therror(cause);
+
+    expect(err.message).to.be.eql('Really bad error');
+    expect(err).to.have.property('badDeveloper', true);
+  });
+
+  describe('when specifying causes', function() {
+    it('should be able to create a Therror with cause', function() {
+      let cause = new Error('Causer error');
+      let err = new Therror(cause);
+
+      expect(err.cause()).to.be.eql(cause);
+      expect(err.message).to.be.eql('Unknown error');
+    });
+
+    it('should be able to create a Therror with cause and message', function() {
+      let cause = new Error('Causer error');
+      let err = new Therror(cause, 'Something happened');
+
+      expect(err.cause()).to.be.eql(cause);
+      expect(err.message).to.be.eql('Something happened');
+    });
+
+    it('should be able to create a Therror with cause and message', function() {
+      let cause = new Error('Causer error');
+      let err = new Therror(cause, 'Something happened');
+
+      expect(err.cause()).to.be.eql(cause);
+      expect(err.message).to.be.eql('Something happened');
+    });
+
+    it('should be able to accept Numbers as cause and set a message', function() {
+      let err = new Therror(1, 'Number error');
+
+      expect(err.cause()).to.be.eql(1);
+      expect(err.message).to.be.eql('Number error');
+    });
+
+    it('should be able to accept Strings as cause and set a message', function() {
+      let err = new Therror('String error', 'Number error');
+
+      expect(err.cause()).to.be.eql('String error');
+      expect(err.message).to.be.eql('Number error');
+    });
+
+    it('should be able to accept Objects as cause and set a message', function() {
+      let cause = {
+        badDeveloper: true
+      };
+      let err = new Therror(cause, '3rd party error');
+
+      expect(err.cause()).to.be.eql(cause);
+      expect(err.message).to.be.eql('3rd party error');
+      expect(err).to.not.have.property('badDeveloper');
+    });
   });
 
   describe('when specifying properties in the instantiation', function() {
@@ -479,6 +542,60 @@ describe('Therror', function() {
       expect(err.statusCode).to.be.eql(503);
       expect(err.name).to.be.eql('ServiceUnavailable');
       expect(err.message).to.be.eql('Database mongo misconfigured');
+      expect(err.toPayload()).to.be.eql({
+        error: 'InternalServerError',
+        message: 'An internal server error occurred'
+      });
+    });
+
+    it('should set string as message for ServerError', function() {
+      let cause = '3rd party error';
+      let err = new Therror.ServerError.ServiceUnavailable(cause);
+
+      expect(err.statusCode).to.be.eql(503);
+      expect(err.name).to.be.eql('ServiceUnavailable');
+      expect(err.message).to.be.eql('3rd party error');
+      expect(err.toPayload()).to.be.eql({
+        error: 'InternalServerError',
+        message: 'An internal server error occurred'
+      });
+    });
+
+    it('should set string as cause for ServerError', function() {
+      let cause = '3rd party error';
+      let err = new Therror.ServerError.ServiceUnavailable(cause, 'uncaught error');
+
+      expect(err.statusCode).to.be.eql(503);
+      expect(err.name).to.be.eql('ServiceUnavailable');
+      expect(err.message).to.be.eql('uncaught error');
+      expect(err.cause()).to.be.eql(cause);
+      expect(err.toPayload()).to.be.eql({
+        error: 'InternalServerError',
+        message: 'An internal server error occurred'
+      });
+    });
+
+    it('should set Number as message for ServerError', function() {
+      let cause = 1;
+      let err = new Therror.ServerError.ServiceUnavailable(cause);
+
+      expect(err.statusCode).to.be.eql(503);
+      expect(err.name).to.be.eql('ServiceUnavailable');
+      expect(err.message).to.be.eql(String(cause));
+      expect(err.toPayload()).to.be.eql({
+        error: 'InternalServerError',
+        message: 'An internal server error occurred'
+      });
+    });
+
+    it('should set Number as cause for ServerError', function() {
+      let cause = 1;
+      let err = new Therror.ServerError.ServiceUnavailable(cause, 'uncaught error');
+
+      expect(err.statusCode).to.be.eql(503);
+      expect(err.name).to.be.eql('ServiceUnavailable');
+      expect(err.message).to.be.eql('uncaught error');
+      expect(err.cause()).to.be.eql(cause);
       expect(err.toPayload()).to.be.eql({
         error: 'InternalServerError',
         message: 'An internal server error occurred'
