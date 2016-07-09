@@ -441,20 +441,12 @@ describe('Therror', function() {
       });
     });
 
-    it('should have precreated classes for statusCodes', function() {
-
-      let err = new Therror.HTTP.NotFound('The user ${user} does not exists', {user: 'Sarah'});
-
-      expect(err.statusCode).to.be.eql(404);
-      expect(err.message).to.be.eql('The user Sarah does not exists');
-      expect(err.toPayload()).to.be.eql({
-        error: 'NotFound',
-        message: 'The user Sarah does not exists'
-      });
-    });
 
     it('should hide information to the client', function() {
-      let err = new Therror.HTTP.ServiceUnavailable('Database ${type} misconfigured', {type: 'mongo'});
+
+      class ServiceUnavailable extends Therror.HTTP(503) {}
+
+      let err = new ServiceUnavailable('Database ${type} misconfigured', {type: 'mongo'});
 
       expect(err.statusCode).to.be.eql(503);
       expect(err.name).to.be.eql('ServiceUnavailable');
