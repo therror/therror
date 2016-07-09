@@ -82,9 +82,11 @@ try {
 }
 ```
 
-### HTTP Error classes
+### Server Error classes
+Common use case for your Server Error. Includes Therror.Notificator, Therror.Loggable, Therror.WithMessage and Therror.HTTP mixins
+
 ```js
-let err = new Therror.HTTP.NotFound('The user ${user} does not exists', {user: 'Sarah'});
+let err = new Therror.ServerError.NotFound('The user ${user} does not exists', {user: 'Sarah'});
 
 res.statusCode(err.statusCode) // 404
 res.json(err.toPayload())
@@ -100,7 +102,7 @@ a generic response to hide the implementation details to the user, while
 having the original properties untouched to log the error as it was defined
 
 ```js
-let err = new Therror.HTTP.ServiceUnavailable('BD Misconfigured');
+let err = new Therror.ServerError.ServiceUnavailable('BD Misconfigured');
 
 console.log(err); // [ServiceUnavailable: BD Misconfigured]
 
@@ -113,7 +115,19 @@ res.json(err.toPayload())
 // }
 ```
 
-The following classes have been defined in `Therror.HTTP`
+Create your own
+```js
+class UserNotFound extends Therror.ServerError({
+  message: 'User ${username} does not exists',
+  level: 'info',
+  statusCode: 404
+}){}
+
+let error =  new UserNotFound({username: 'John Doe'});
+```
+
+
+The following classes have been defined in `Therror.ServerError`
 ```js
 {
      '400': 'BadRequest',
@@ -197,18 +211,6 @@ Promise.try(() => {
 ```
 
 ### Add functionality to your errors by [using mixins](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Mix-ins)
-
-#### ServerErrors
-Common use case for your Server Error. Includes Therror.Notificator, Therror.Loggable, Therror.WithMessage and Therror.HTTP mixins
-```js
-class UserNotFound extends Therror.ServerError({
-  message: 'User ${username} does not exists',
-  level: 'info',
-  statusCode: 404
-}){}
-
-let error =  new UserNotFound({username: 'John Doe'});
-```
 
 #### Shared messages across all instances
 DRY. Rehuse the errors customizing only metadata
@@ -335,6 +337,7 @@ Therror ships [lodash template](https://lodash.com/docs#template) system to allo
 More info: `Therror.parse()`
 
 ## Peer Projects
+* [therror-connect](https://github.com/therror/therror-connect): Connect/Express error handler
 * [therror-doc](https://github.com/therror/therror-doc): Documentation parser for therror (WIP)
 * [serr](https://github.com/therror/serr): Error serializer to Objects and Strings
 
