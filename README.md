@@ -81,9 +81,12 @@ try {
   // [Error: 3rd Party error]
 }
 ```
+You can also use [logops](https://github.com/telefonicaid/logops), an error friendly logger that incorporates support off the shell for printing error causes.
 
 ### Server Error classes
-Common use case for your Server Error. Includes Therror.Notificator, Therror.Loggable, Therror.WithMessage and Therror.HTTP mixins
+Common use case for your Server Errors. 
+
+Includes `Therror.Notificator`, `Therror.Loggable`, `Therror.WithMessage` and `Therror.HTTP` mixins. If you are using express, [therror-connect](https://github.com/therror/therror-connect) error handler might be useful
 
 ```js
 let err = new Therror.ServerError.NotFound('The user ${user} does not exists', {user: 'Sarah'});
@@ -104,9 +107,10 @@ having the original properties untouched to log the error as it was defined
 ```js
 let err = new Therror.ServerError.ServiceUnavailable('BD Misconfigured');
 
+// Log the real error data
 console.log(err); // [ServiceUnavailable: BD Misconfigured]
 
-// Send a hidden response to the client (Express example)
+// but send a hidden response to the client (Express example)
 res.statusCode(err.statusCode) // 503
 res.json(err.toPayload())
 // {
@@ -125,7 +129,6 @@ class UserNotFound extends Therror.ServerError({
 
 let error =  new UserNotFound({username: 'John Doe'});
 ```
-
 
 The following classes have been defined in `Therror.ServerError`
 ```js
