@@ -554,11 +554,20 @@ describe('Therror', function() {
 
       expect(err.statusCode).to.be.eql(404);
       expect(err.message).to.be.eql('The user Sarah does not exists');
+      expect(err.level()).to.be.eql('info');
       expect(err.toPayload()).to.be.eql({
         error: 'NotFound',
         message: 'The user Sarah does not exists'
       });
 
+    });
+
+    it('should have error as level for precreated classes with statusCode > 500', function() {
+
+      let err = new Therror.ServerError.InternalServerError();
+
+      expect(err.statusCode).to.be.eql(500);
+      expect(err.level()).to.be.eql('error');
     });
 
     it('should hide information to the client', function() {

@@ -109,6 +109,7 @@ having the original properties untouched to log the error as it was defined
 let err = new Therror.ServerError.ServiceUnavailable('BD Misconfigured');
 
 // Log the real error data
+// errors with statusCode < 500 will be logged as info. >= 500 will be logged as 'error'
 console.log(err); // [ServiceUnavailable: BD Misconfigured]
 
 // but send a hidden response to the client (Express example)
