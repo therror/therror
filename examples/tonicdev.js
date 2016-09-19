@@ -23,6 +23,6 @@ console.log(customError.DB); // Users
 
 let mixinError = new UserNotFound({username: 'John Doe'});
 console.log(mixinError.toPayload()); // { error: 'UserNotFound', message: 'User John Doe does not exists' }
-console.log(mixinError.statusCode()); // 404
+console.log(mixinError.statusCode); // 404
 console.log(mixinError.level()); // info
 mixinError.log(); // { [UserNotFound: User John Doe does not exists] username: 'John Doe' }

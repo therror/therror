@@ -374,6 +374,18 @@ describe('Therror', function() {
 
       expect(logger.info).to.have.been.calledWith(err);
     });
+
+    it('should default to "error" level', function() {
+      let logger = {
+        info: sandbox.spy()
+      };
+
+      class MyError extends Therror.Loggable() {}
+
+      let err = new MyError('What a ${what}', {what: 'pitty'});
+
+      expect(err.level()).to.be.eql('error');
+    });
   });
 
   describe('when using WithMessage', function () {
@@ -477,6 +489,27 @@ describe('Therror', function() {
         message: 'An internal server error occurred'
       });
     });
+
+    it('should default to 500 when no statusCode provided', function() {
+      class ServerError extends Therror.HTTP() {}
+
+      let err = new ServerError();
+      let err2 = new ServerError('Boom!');
+
+      expect(err.statusCode).to.be.eql(500);
+      expect(err.message).to.be.eql('Internal Server Error');
+      expect(err2.message).to.be.eql('Boom!');
+
+      expect(err.toPayload()).to.be.eql({
+        error: 'InternalServerError',
+        message: 'An internal server error occurred'
+      });
+
+      expect(err2.toPayload()).to.be.eql({
+        error: 'InternalServerError',
+        message: 'An internal server error occurred'
+      });
+    });
   });
 
   describe('when using ServerError', function () {
@@ -510,9 +543,9 @@ describe('Therror', function() {
 
       expect(err.user).to.be.eql('John');
       expect(err.cause()).to.be.eql(cause);
-      expect(err.message).to.be.eql('Service Unavailable');
+      expect(err.message).to.be.eql('Internal Server Error');
       expect(err.level()).to.be.eql('error');
-      expect(err.statusCode).to.be.eql(503);
+      expect(err.statusCode).to.be.eql(500);
     });
 
     it('should have precreated classes for statusCodes', function() {

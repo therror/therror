@@ -226,6 +226,8 @@ declare namespace Mixins {
          * `log()` will call the method specified as this mixin parameter in the 
          * Therror.Loggable.logger object so you can preconfigure how an error is logged
          * `level()` simply returns the parameter
+         * 
+         * `level` defaults to 'error'
          * @example
          * ```js
          * // Set your favourite logger (defaults to console)
@@ -241,7 +243,7 @@ declare namespace Mixins {
          * notFound.level(); // 'info' 
          * ```
          */
-        (level: string, Base?: TherrorConstructor<Therror>): TherrorConstructor<Classes.Loggable>;
+        (level?: string, Base?: TherrorConstructor<Therror>): TherrorConstructor<Classes.Loggable>;
         /**
          * The Logger used to Log Loggable errors
          * @default console
@@ -270,6 +272,8 @@ declare namespace Mixins {
          * 
          * `toPayload()` gets the error as an object literal, ready to be sent as JSON payload
          * `statusCode` returns the associated status code
+         * 
+         * `statusCode` defaults to 500
          * @example
          * ```js
          * class UserNotFound extends Therror.HTTP('404') {}
@@ -284,7 +288,7 @@ declare namespace Mixins {
          * // }
          * ```
          */
-        (statusCode: number|string, Base?: TherrorConstructor<Therror>): TherrorConstructor<Classes.HTTP>;
+        (statusCode?: number|string, Base?: TherrorConstructor<Therror>): TherrorConstructor<Classes.HTTP>;
     }
 
     /**
@@ -300,7 +304,7 @@ declare namespace Mixins {
         /** 
          * The statusCode associated
          * See `Therror.HTTP` 
-         * @default 503
+         * @default 500
          */
         statusCode?: number | string ;
         /** 
