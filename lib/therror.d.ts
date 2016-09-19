@@ -385,196 +385,196 @@ declare namespace Mixins {
     namespace ServerErrors {
         interface  BadRequest extends Classes.ServerError {}
         interface  BadRequestConstructor extends TherrorConstructor<BadRequest> {
-            /** ServerError with statusCode: 400, message: 'Bad Request', level: 'error' */
+            /** ServerError with statusCode: 400, message: 'Bad Request', level: 'info' */
             new(): BadRequest;
         }
         export let BadRequest: BadRequestConstructor;
 
         interface  Unauthorized extends Classes.ServerError {}
         interface  UnauthorizedConstructor extends TherrorConstructor<Unauthorized> {
-            /** ServerError with statusCode: 401, message: 'Unauthorized', level: 'error' */
+            /** ServerError with statusCode: 401, message: 'Unauthorized', level: 'info' */
             new(): Unauthorized;
         }
         export let Unauthorized: UnauthorizedConstructor;
 
         interface  PaymentRequired extends Classes.ServerError {}
         interface  PaymentRequiredConstructor extends TherrorConstructor<PaymentRequired> {
-            /** ServerError with statusCode: 402, message: 'Payment Required', level: 'error' */
+            /** ServerError with statusCode: 402, message: 'Payment Required', level: 'info' */
             new(): PaymentRequired;
         }
         export let PaymentRequired: PaymentRequiredConstructor;
 
         interface  Forbidden extends Classes.ServerError {}
         interface  ForbiddenConstructor extends TherrorConstructor<Forbidden> {
-            /** ServerError with statusCode: 403, message: 'Forbidden', level: 'error' */
+            /** ServerError with statusCode: 403, message: 'Forbidden', level: 'info' */
             new(): Forbidden;
         }
         export let Forbidden: ForbiddenConstructor;
 
         interface  NotFound extends Classes.ServerError {}
         interface  NotFoundConstructor extends TherrorConstructor<NotFound> {
-            /** ServerError with statusCode: 404, message: 'Not Found', level: 'error' */
+            /** ServerError with statusCode: 404, message: 'Not Found', level: 'info' */
             new(): NotFound;
         }
         export let NotFound: NotFoundConstructor;
 
         interface  MethodNotAllowed extends Classes.ServerError {}
         interface  MethodNotAllowedConstructor extends TherrorConstructor<MethodNotAllowed> {
-            /** ServerError with statusCode: 405, message: 'Method Not Allowed', level: 'error' */
+            /** ServerError with statusCode: 405, message: 'Method Not Allowed', level: 'info' */
             new(): MethodNotAllowed;
         }
         export let MethodNotAllowed: MethodNotAllowedConstructor;
 
         interface  NotAcceptable extends Classes.ServerError {}
         interface  NotAcceptableConstructor extends TherrorConstructor<NotAcceptable> {
-            /** ServerError with statusCode: 406, message: 'Not Acceptable', level: 'error' */
+            /** ServerError with statusCode: 406, message: 'Not Acceptable', level: 'info' */
             new(): NotAcceptable;
         }
         export let NotAcceptable: NotAcceptableConstructor;
 
         interface  ProxyAuthenticationRequired extends Classes.ServerError {}
         interface  ProxyAuthenticationRequiredConstructor extends TherrorConstructor<ProxyAuthenticationRequired> {
-            /** ServerError with statusCode: 407, message: 'Proxy Authentication Required', level: 'error' */
+            /** ServerError with statusCode: 407, message: 'Proxy Authentication Required', level: 'info' */
             new(): ProxyAuthenticationRequired;
         }
         export let ProxyAuthenticationRequired: ProxyAuthenticationRequiredConstructor;
 
         interface  RequestTimeout extends Classes.ServerError {}
         interface  RequestTimeoutConstructor extends TherrorConstructor<RequestTimeout> {
-            /** ServerError with statusCode: 408, message: 'Request Timeout', level: 'error' */
+            /** ServerError with statusCode: 408, message: 'Request Timeout', level: 'info' */
             new(): RequestTimeout;
         }
         export let RequestTimeout: RequestTimeoutConstructor;
 
         interface  Conflict extends Classes.ServerError {}
         interface  ConflictConstructor extends TherrorConstructor<Conflict> {
-            /** ServerError with statusCode: 409, message: 'Conflict', level: 'error' */
+            /** ServerError with statusCode: 409, message: 'Conflict', level: 'info' */
             new(): Conflict;
         }
         export let Conflict: ConflictConstructor;
 
         interface  Gone extends Classes.ServerError {}
         interface  GoneConstructor extends TherrorConstructor<Gone> {
-            /** ServerError with statusCode: 410, message: 'Gone', level: 'error' */
+            /** ServerError with statusCode: 410, message: 'Gone', level: 'info' */
             new(): Gone;
         }
         export let Gone: GoneConstructor;
 
         interface  LengthRequired extends Classes.ServerError {}
         interface  LengthRequiredConstructor extends TherrorConstructor<LengthRequired> {
-            /** ServerError with statusCode: 411, message: 'Length Required', level: 'error' */
+            /** ServerError with statusCode: 411, message: 'Length Required', level: 'info' */
             new(): LengthRequired;
         }
         export let LengthRequired: LengthRequiredConstructor;
 
         interface  PreconditionFailed extends Classes.ServerError {}
         interface  PreconditionFailedConstructor extends TherrorConstructor<PreconditionFailed> {
-            /** ServerError with statusCode: 412, message: 'Precondition Failed', level: 'error' */
+            /** ServerError with statusCode: 412, message: 'Precondition Failed', level: 'info' */
             new(): PreconditionFailed;
         }
         export let PreconditionFailed: PreconditionFailedConstructor;
 
         interface  RequestEntityTooLarge extends Classes.ServerError {}
         interface  RequestEntityTooLargeConstructor extends TherrorConstructor<RequestEntityTooLarge> {
-            /** ServerError with statusCode: 413, message: 'Request Entity Too Large', level: 'error' */
+            /** ServerError with statusCode: 413, message: 'Request Entity Too Large', level: 'info' */
             new(): RequestEntityTooLarge;
         }
         export let RequestEntityTooLarge: RequestEntityTooLargeConstructor;
 
         interface  RequestUriTooLarge extends Classes.ServerError {}
         interface  RequestUriTooLargeConstructor extends TherrorConstructor<RequestUriTooLarge> {
-            /** ServerError with statusCode: 414, message: 'Request-URI Too Large', level: 'error' */
+            /** ServerError with statusCode: 414, message: 'Request-URI Too Large', level: 'info' */
             new(): RequestUriTooLarge;
         }
         export let RequestUriTooLarge: RequestUriTooLargeConstructor;
 
         interface  UnsupportedMediaType extends Classes.ServerError {}
         interface  UnsupportedMediaTypeConstructor extends TherrorConstructor<UnsupportedMediaType> {
-            /** ServerError with statusCode: 415, message: 'Unsupported Media Type', level: 'error' */
+            /** ServerError with statusCode: 415, message: 'Unsupported Media Type', level: 'info' */
             new(): UnsupportedMediaType;
         }
         export let UnsupportedMediaType: UnsupportedMediaTypeConstructor;
 
         interface  RequestedRangeNotSatisfiable extends Classes.ServerError {}
         interface  RequestedRangeNotSatisfiableConstructor extends TherrorConstructor<RequestedRangeNotSatisfiable> {
-            /** ServerError with statusCode: 416, message: 'Requested Range Not Satisfiable', level: 'error' */
+            /** ServerError with statusCode: 416, message: 'Requested Range Not Satisfiable', level: 'info' */
             new(): RequestedRangeNotSatisfiable;
         }
         export let RequestedRangeNotSatisfiable: RequestedRangeNotSatisfiableConstructor;
 
         interface  ExpectationFailed extends Classes.ServerError {}
         interface  ExpectationFailedConstructor extends TherrorConstructor<ExpectationFailed> {
-            /** ServerError with statusCode: 417, message: 'Expectation Failed', level: 'error' */
+            /** ServerError with statusCode: 417, message: 'Expectation Failed', level: 'info' */
             new(): ExpectationFailed;
         }
         export let ExpectationFailed: ExpectationFailedConstructor;
 
         interface  ImATeapot extends Classes.ServerError {}
         interface  ImATeapotConstructor extends TherrorConstructor<ImATeapot> {
-            /** ServerError with statusCode: 418, message: 'I'm a teapot', level: 'error' */
+            /** ServerError with statusCode: 418, message: 'I'm a teapot', level: 'info' */
             new(): ImATeapot;
         }
         export let ImATeapot: ImATeapotConstructor;
 
         interface  UnprocessableEntity extends Classes.ServerError {}
         interface  UnprocessableEntityConstructor extends TherrorConstructor<UnprocessableEntity> {
-            /** ServerError with statusCode: 422, message: 'Unprocessable Entity', level: 'error' */
+            /** ServerError with statusCode: 422, message: 'Unprocessable Entity', level: 'info' */
             new(): UnprocessableEntity;
         }
         export let UnprocessableEntity: UnprocessableEntityConstructor;
 
         interface  Locked extends Classes.ServerError {}
         interface  LockedConstructor extends TherrorConstructor<Locked> {
-            /** ServerError with statusCode: 423, message: 'Locked', level: 'error' */
+            /** ServerError with statusCode: 423, message: 'Locked', level: 'info' */
             new(): Locked;
         }
         export let Locked: LockedConstructor;
 
         interface  FailedDependency extends Classes.ServerError {}
         interface  FailedDependencyConstructor extends TherrorConstructor<FailedDependency> {
-            /** ServerError with statusCode: 424, message: 'Failed Dependency', level: 'error' */
+            /** ServerError with statusCode: 424, message: 'Failed Dependency', level: 'info' */
             new(): FailedDependency;
         }
         export let FailedDependency: FailedDependencyConstructor;
 
         interface  UnorderedCollection extends Classes.ServerError {}
         interface  UnorderedCollectionConstructor extends TherrorConstructor<UnorderedCollection> {
-            /** ServerError with statusCode: 425, message: 'Unordered Collection', level: 'error' */
+            /** ServerError with statusCode: 425, message: 'Unordered Collection', level: 'info' */
             new(): UnorderedCollection;
         }
         export let UnorderedCollection: UnorderedCollectionConstructor;
 
         interface  UpgradeRequired extends Classes.ServerError {}
         interface  UpgradeRequiredConstructor extends TherrorConstructor<UpgradeRequired> {
-            /** ServerError with statusCode: 426, message: 'Upgrade Required', level: 'error' */
+            /** ServerError with statusCode: 426, message: 'Upgrade Required', level: 'info' */
             new(): UpgradeRequired;
         }
         export let UpgradeRequired: UpgradeRequiredConstructor;
 
         interface  PreconditionRequired extends Classes.ServerError {}
         interface  PreconditionRequiredConstructor extends TherrorConstructor<PreconditionRequired> {
-            /** ServerError with statusCode: 428, message: 'Precondition Required', level: 'error' */
+            /** ServerError with statusCode: 428, message: 'Precondition Required', level: 'info' */
             new(): PreconditionRequired;
         }
         export let PreconditionRequired: PreconditionRequiredConstructor;
 
         interface  TooManyRequests extends Classes.ServerError {}
         interface  TooManyRequestsConstructor extends TherrorConstructor<TooManyRequests> {
-            /** ServerError with statusCode: 429, message: 'Too Many Requests', level: 'error' */
+            /** ServerError with statusCode: 429, message: 'Too Many Requests', level: 'info' */
             new(): TooManyRequests;
         }
         export let TooManyRequests: TooManyRequestsConstructor;
 
         interface  RequestHeaderFieldsTooLarge extends Classes.ServerError {}
         interface  RequestHeaderFieldsTooLargeConstructor extends TherrorConstructor<RequestHeaderFieldsTooLarge> {
-            /** ServerError with statusCode: 431, message: 'Request Header Fields Too Large', level: 'error' */
+            /** ServerError with statusCode: 431, message: 'Request Header Fields Too Large', level: 'info' */
             new(): RequestHeaderFieldsTooLarge;
         }
         export let RequestHeaderFieldsTooLarge: RequestHeaderFieldsTooLargeConstructor;
 
         interface  UnavailableForLegalReasons extends Classes.ServerError {}
         interface  UnavailableForLegalReasonsConstructor extends TherrorConstructor<UnavailableForLegalReasons> {
-            /** ServerError with statusCode: 451, message: 'Unavailable For Legal Reasons', level: 'error' */
+            /** ServerError with statusCode: 451, message: 'Unavailable For Legal Reasons', level: 'info' */
             new(): UnavailableForLegalReasons;
         }
         export let UnavailableForLegalReasons: UnavailableForLegalReasonsConstructor;
