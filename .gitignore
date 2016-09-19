@@ -1,6 +1,8 @@
 node_modules/
 .idea/
+.vscode/
 coverage/
+typings/
 
-
+test/**/.typings.js
 npm-debug.log

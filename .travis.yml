@@ -2,7 +2,13 @@ language: node_js
 node_js:
   - "4"
   - "6"
-script: "npm run travis"
+script: 
+  - "npm run travis"
+  - "npm run lint"
+cache:
+  directories:
+    - node_modules
+    - typings
 notifications:
   email:
     - javier.mendiaracanardo@telefonica.com
