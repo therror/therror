@@ -74,7 +74,7 @@ interface TherrorConstructor<T> {
 
 interface TherrorStatic extends TherrorConstructor<Therror> {
     /** Subscribes to error creations for those errors that are ${link Classes.Notificable} */
-    on(eventName: Event, callback: (error: Therror) => void): any;
+    on(eventName: Event, callback: (error: Therror) => any): any;
     /**
      * Notifies all subscribers about a new Error
      * @protected
