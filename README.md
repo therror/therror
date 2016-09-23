@@ -7,7 +7,7 @@ It's written in ES6, for node >= 4
 [![npm version](https://badge.fury.io/js/therror.svg)](http://badge.fury.io/js/therror)
 [![Build Status](https://travis-ci.org/therror/therror.svg)](https://travis-ci.org/therror/therror)
 [![Coverage Status](https://coveralls.io/repos/therror/therror/badge.svg?branch=master)](https://coveralls.io/r/therror/therror?branch=master)
-![Typescript definitions](https://img.shields.io/badge/TypeScript%20Definition-%E2%9C%93-blue.svg)
+![Typescript definitions](https://img.shields.io/badge/TypeScript%20Definition-.d.ts-blue.svg)
 
 Therror errors are [javascript errors](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error)
 with sugar. You can use this library to create your application or library errors, and maintain fully interoperability with 
