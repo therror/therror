@@ -1,7 +1,7 @@
 {
   "name": "therror",
   "description": "Create, document, customize and throw node errors easily",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "homepage": "https://therror.github.io/therror",
   "author": {
     "name": "Javier Mendiara Cañardo",
