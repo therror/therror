@@ -115,6 +115,7 @@ export declare namespace Classes {
         /** The namespace this error belongs to */
         namespace: string;
     }
+    export class Namespaced implements Namespaced {}
 
     export interface Serializable {
         /**
@@ -147,8 +148,10 @@ export declare namespace Classes {
          */
         toJSON(): Properties;
     }
+    export class Serializable implements Serializable {}
 
-    export interface Notificator extends Therror { }
+    export interface Notificator extends Therror {}
+    export class Notificator implements Notificator {}
 
     export interface Loggable {
         /**
@@ -159,8 +162,10 @@ export declare namespace Classes {
         /** Gets the log level associated to this error */
         level(): string;
     }
+    export class Loggable implements Loggable {}
 
-    export interface WithMessage extends Therror { }
+    export interface WithMessage extends Therror {}
+    export class WithMessage implements WithMessage {}
 
     export interface HTTP extends Therror {
         /**
@@ -176,8 +181,10 @@ export declare namespace Classes {
          */
         toPayload(): Properties;
     }
+    export class HTTP implements HTTP {}
 
     export interface ServerError extends HTTP, WithMessage, Notificator, Loggable, Namespaced {}
+    export class ServerError implements ServerError {}
 }
 
 declare namespace Mixins {
