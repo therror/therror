@@ -59,7 +59,14 @@ describe('Therror', function() {
       let err = new Therror(cause);
 
       expect(err.cause()).to.be.eql(cause);
-      expect(err.message).to.be.eql('Unknown error');
+    });    
+    
+    it('should be able to create a Therror with cause and use cause message when no one specified', function() {
+      let cause = new Error('Causer error');
+      let err = new Therror(cause);
+
+      expect(err.cause()).to.be.eql(cause);
+      expect(err.message).to.be.eql('Causer error');
     });
 
     it('should be able to create a Therror with cause and message', function() {
