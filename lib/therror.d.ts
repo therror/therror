@@ -7,8 +7,8 @@
  * * nesting: Add the parent cause to your library errors
  * * notifications: Subscribe to events when an error is created: Log them in a single place.
  * * internationalization: Easy to hook your own i18n library to translate error messages
- * * predefined http errors: Standard HTTP Error classes for quick programming * 
- * 
+ * * predefined http errors: Standard HTTP Error classes for quick programming *
+ *
  * @url https://github.com/therror/therror
  * @license Apache-2
  * @copyright Telefonica I+D
@@ -18,7 +18,7 @@ interface Therror extends Error {
     isTherror: boolean;
     /** Gets the error cause, as passed in the constructor */
     cause(): any;
-    /** 
+    /**
      * This is for i18n support. Generates a message based on the provided argument
      * with the error properties replaced.
      * @example
@@ -27,9 +27,9 @@ interface Therror extends Error {
      *   what: 'socks',
      *   color: 'blue'
      * });
-     * 
+     *
      * err.message === 'My blue socks';
-     * 
+     *
      * let message = err.parse('Mis ${what} ${color}');
      * message === 'Mis socks blue';
      * ```
@@ -38,12 +38,12 @@ interface Therror extends Error {
 }
 
 interface TherrorConstructor<T> {
-    /** 
+    /**
      * Create a Therror with the provided message
      */
     new(message?: string): T;
-    /** 
-     * Creates a Therror with the provided message and properties as its instance properties 
+    /**
+     * Creates a Therror with the provided message and properties as its instance properties
      * The message is a string that supports ES6 template string syntax to print passed properties
      * @example
      * ```js
@@ -53,13 +53,13 @@ interface TherrorConstructor<T> {
      * ```
      */
     new(message?: string, properties?: Properties): T;
-    /** 
-     * Creates a Therror with 
+    /**
+     * Creates a Therror with
      *  * the error cause that generated this specific error
      *  * the provided message
-     *  * properties as its instance properties 
-     * 
-     * The message is a string that supports ES6 template string syntax to print passed properties 
+     *  * properties as its instance properties
+     *
+     * The message is a string that supports ES6 template string syntax to print passed properties
      * @example
      * ```js
      * let cause = new Error('validation Failed');
@@ -124,7 +124,7 @@ export declare namespace Classes {
          * ```js
          * let cause = new Error('ENOENT');
          * let error = new FatalError(cause, 'Something went wrong');
-         * 
+         *
          * console.log('%s', error);
          *   // FatalError: Something went wrong
          *   //    at repl:1:35
@@ -140,7 +140,7 @@ export declare namespace Classes {
          * ```js
          * let cause = new Error('ENOENT');
          * let error = new FatalError(cause, 'Something went wrong');
-         * 
+         *
          * console.log('%j', error);
          * // {"message":"Something went wrong","name":"FatalError","constructor":"FatalError",
          * //  "causes":[{"message":"ENOENT","name":"Error","constructor":"Error"}]}
@@ -155,8 +155,8 @@ export declare namespace Classes {
 
     export interface Loggable {
         /**
-         * Logs the error using Therror.Loggable.logger.`level`, where level is the Mixin parameter especified when 
-         * defining the Class 
+         * Logs the error using Therror.Loggable.logger.`level`, where level is the Mixin parameter especified when
+         * defining the Class
          */
         log(): any;
         /** Gets the log level associated to this error */
@@ -173,8 +173,8 @@ export declare namespace Classes {
          */
         statusCode: number;
         /**
-         * Gets a representation of the error as an literal object meant to be used as 
-         * the final response sent to the client as a JSON 
+         * Gets a representation of the error as an literal object meant to be used as
+         * the final response sent to the client as a JSON
          * When the error `statusCode` is >= 500, it will set in the payload response
          * a generic response to hide the implementation details to the user, while
          * having the original properties untouched to log the error as it was defined
@@ -189,9 +189,9 @@ export declare namespace Classes {
 
 declare namespace Mixins {
     interface Namespaced {
-        /** 
+        /**
          * Mixin to prepend the provided parameter to the error name class
-         *  
+         *
          * @example
          * ```js
          * class InvalidParamError extends Therror.Namespaced('Server') {}
@@ -204,10 +204,10 @@ declare namespace Mixins {
     }
 
     interface Serializable {
-        /** 
-         * Mixin to add toJSON and toString methods to the error, implemented with 
-         * https://github.com/therror/serr 
-         * 
+        /**
+         * Mixin to add toJSON and toString methods to the error, implemented with
+         * https://github.com/therror/serr
+         *
          * @example
          * ```js
          * class InvalidParamError extends Therror.Namespaced('Server') {}
@@ -220,9 +220,9 @@ declare namespace Mixins {
     }
 
     interface Notificator {
-        /** 
-         * Mixin to add notification capabilities to this errors: 
-         * Its creation will emit a 'create' event, subscribable with Therror.on('create', ...) 
+        /**
+         * Mixin to add notification capabilities to this errors:
+         * Its creation will emit a 'create' event, subscribable with Therror.on('create', ...)
          */
         (Base?: TherrorConstructor<Therror>): TherrorConstructor<Classes.Notificator>;
     }
@@ -230,24 +230,24 @@ declare namespace Mixins {
     interface Loggable {
         /**
          * Mixin to add `log()` and `level()` method to errors
-         * `log()` will call the method specified as this mixin parameter in the 
+         * `log()` will call the method specified as this mixin parameter in the
          * Therror.Loggable.logger object so you can preconfigure how an error is logged
          * `level()` simply returns the parameter
-         * 
+         *
          * `level` defaults to 'error'
          * @example
          * ```js
          * // Set your favourite logger (defaults to console)
          * Therror.Loggable.logger = require('logops');
-         * 
+         *
          * class NotFoundError extends Therror.Loggable('info') {}
-         * 
+         *
          * let notFound = new NotFoundError('User Not found');
-         * 
+         *
          * notFound.log();
          * // calls logger.info(notFound)
          * // INFO  NotFoundError: User Not Found
-         * notFound.level(); // 'info' 
+         * notFound.level(); // 'info'
          * ```
          */
         (level?: string, Base?: TherrorConstructor<Therror>): TherrorConstructor<Classes.Loggable>;
@@ -273,19 +273,19 @@ declare namespace Mixins {
 
     interface HTTP {
         /**
-         * Mixin to add `toPayload()` and `statusCode` to errors. 
-         * 
+         * Mixin to add `toPayload()` and `statusCode` to errors.
+         *
          * _You will likely use `ServerError`, as it has this and other useful mixins._
-         * 
+         *
          * `toPayload()` gets the error as an object literal, ready to be sent as JSON payload
          * `statusCode` returns the associated status code
-         * 
+         *
          * `statusCode` defaults to 500
          * @example
          * ```js
          * class UserNotFound extends Therror.HTTP('404') {}
          * let err = new UserNotFound('The user ${user} does not exists', {user: 'Sarah'});
-         * 
+         *
          * // Send the response (Express example)
          * res.statusCode(err.statusCode) // 404
          * res.json(err.toPayload())
@@ -302,19 +302,19 @@ declare namespace Mixins {
      * Options to create a ServerError Mixin
      */
     interface ServerErrorOptions {
-        /** 
+        /**
          * The log level associated
          * See `Therror.Loggable`
          * @default 'error'
          */
         level?: string;
-        /** 
+        /**
          * The statusCode associated
-         * See `Therror.HTTP` 
+         * See `Therror.HTTP`
          * @default 500
          */
         statusCode?: number | string ;
-        /** 
+        /**
          * The default message for this kind of errors
          * See `Therror.WithMessage`
          * @default to a human readable description for the `statusCode`
@@ -325,16 +325,16 @@ declare namespace Mixins {
     interface ServerError {
         /**
          * Mixin to add a set of useful tools to make your Server Errors very expressive
-         * 
-         * Includes `Therror.Notificator`, `Therror.Loggable`, `Therror.WithMessage` and `Therror.HTTP` mixins, 
+         *
+         * Includes `Therror.Notificator`, `Therror.Loggable`, `Therror.WithMessage` and `Therror.HTTP` mixins,
          * configurable via mixin parameters
-         * 
+         *
          * A set of all HTTP Errors classes created with this mixin is available as properties in this method ie:
-         * `Therror.ServerError.NotFound` 
+         * `Therror.ServerError.NotFound`
          * @example
          * ```js
          * class MyServerError extends Therror.ServerError() {};
-         * let err = new MyServerError('BD Misconfigured'); 
+         * let err = new MyServerError('BD Misconfigured');
          * // Log the real error data
          * console.log(err); // [ServiceUnavailable: BD Misconfigured]
          * // but send a hidden response to the client (Express example)
