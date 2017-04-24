@@ -74,3 +74,9 @@ let myCustom = new MyCustom();
 myCustom.isTherror;
 myCustom.log();
 myCustom.namespace;
+
+class MyCustomNew extends Therror.Loggable('info', Therror.Namespaced('MyNS')) {}
+let myCustomNew = new MyCustomNew();
+myCustomNew.isTherror;
+myCustomNew.log();
+myCustomNew.namespace;

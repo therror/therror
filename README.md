@@ -346,19 +346,6 @@ More info: `Therror.parse()`
 * [therror-doc](https://github.com/therror/therror-doc): Documentation parser for therror (WIP)
 * [serr](https://github.com/therror/serr): Error serializer to Objects and Strings
 
-## TypeScript limitations
-Typescript definitons is not expressive enought (yet!) to define ES6 Mixins, which are extensively used in Therror. ([Track issue #4890 in Typescript repo](https://github.com/Microsoft/TypeScript/issues/4890)). The limitation is well explained in this [StackOverflow answer](http://stackoverflow.com/questions/39430443/typescript-definition-for-es6-mixins/39433584#39433584).
-
-TL;DR;
-If you want to create your own error classes using the provided mixins, you will need to declare the class shape on your code. We have made this super easy:
-```ts
-import Therror from 'therror';
-import { Classes } from 'therror';
-
-interface MyCustom extends Classes.Loggable, Classes.Namespaced {} // Just make this, and have full TS support for your own classes
-class MyCustom extends Therror.Loggable('info', Therror.Namespaced('MyNS')) {}
-```
-
 ## LICENSE
 
 Copyright 2014,2015,2016 [Telefónica I+D](http://www.tid.es)

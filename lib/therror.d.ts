@@ -187,6 +187,8 @@ export declare namespace Classes {
     export class ServerError implements ServerError {}
 }
 
+type Constructor<T> = new(...args: any[]) => T;
+
 declare namespace Mixins {
     interface Namespaced {
         /**
@@ -200,7 +202,7 @@ declare namespace Mixins {
          * console.log(err) === '[Server.InvalidParamError: Not a valid parameter]';
          * ```
          */
-        (name: string, Base?: TherrorConstructor<Therror>): TherrorConstructor<Classes.Namespaced>;
+        <T extends Constructor<{}>>(name: string, Base?: T): TherrorConstructor<Classes.Namespaced & Therror> & T;
     }
 
     interface Serializable {
@@ -216,7 +218,7 @@ declare namespace Mixins {
          * console.log(err) === '[Server.InvalidParamError: Not a valid parameter]';
          * ```
          */
-        (Base?: TherrorConstructor<Therror>): TherrorConstructor<Classes.Serializable>;
+        <T extends Constructor<{}>>(Base?: T): Constructor<Classes.Serializable & Therror> & T;
     }
 
     interface Notificator {
@@ -224,7 +226,7 @@ declare namespace Mixins {
          * Mixin to add notification capabilities to this errors:
          * Its creation will emit a 'create' event, subscribable with Therror.on('create', ...)
          */
-        (Base?: TherrorConstructor<Therror>): TherrorConstructor<Classes.Notificator>;
+        <T extends Constructor<{}>>(Base?: T): Constructor<Classes.Notificator & Therror> & T;
     }
 
     interface Loggable {
@@ -250,7 +252,7 @@ declare namespace Mixins {
          * notFound.level(); // 'info'
          * ```
          */
-        (level?: string, Base?: TherrorConstructor<Therror>): TherrorConstructor<Classes.Loggable>;
+        <T extends Constructor<{}>>(level?: string, Base?: T): Constructor<Classes.Loggable & Therror> & T;
         /**
          * The Logger used to Log Loggable errors
          * @default console
@@ -268,7 +270,7 @@ declare namespace Mixins {
          * // { [UserNotFoundError: The user John does not exists] }
          * ```
          */
-        (msg: string, Base?: TherrorConstructor<Therror>): TherrorConstructor<Classes.WithMessage>;
+        <T extends Constructor<{}>>(msg: string, Base?: T): Constructor<Classes.WithMessage & Therror> & T;
     }
 
     interface HTTP {
@@ -295,7 +297,7 @@ declare namespace Mixins {
          * // }
          * ```
          */
-        (statusCode?: number|string, Base?: TherrorConstructor<Therror>): TherrorConstructor<Classes.HTTP>;
+        <T extends Constructor<{}>>(statusCode?: number|string, Base?: T): Constructor<Classes.HTTP & Therror> & T;
     }
 
     /**
@@ -347,7 +349,7 @@ declare namespace Mixins {
          * err.log(); // executes Therror.Loggable.logger.error(err);
          * ```
          */
-        (opts?: ServerErrorOptions, Base?: TherrorConstructor<Therror>): TherrorConstructor<Classes.ServerError>;
+        <T extends Constructor<{}>>(opts?: ServerErrorOptions, Base?: T): Constructor<Classes.ServerError & Therror> & T;
         BadRequest: typeof ServerErrors.BadRequest;
         Unauthorized: typeof ServerErrors.Unauthorized;
         PaymentRequired: typeof ServerErrors.PaymentRequired;
