@@ -23,7 +23,8 @@
     "travis": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec test/environment.js 'test/**/*.spec.js' && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage && tsc --noEmit",
     "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R dot test/environment.js 'test/**/*.spec.js'",
     "lint": "jscs lib && eslint lib && tslint './{lib,test}/**/*.ts'",
-    "test": "mocha -R spec test/environment.js 'test/**/*.spec.js' && tsc --noEmit"
+    "test": "mocha -R spec test/environment.js 'test/**/*.spec.js' && npm run test:ts",
+    "test:ts": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/node": "^7.0.13",
