@@ -91,6 +91,7 @@ Includes `Therror.Notificator`, `Therror.Loggable`, `Therror.WithMessage` and `T
 
 ```js
 let err = new Therror.ServerError.NotFound('The user ${user} does not exists', {user: 'Sarah'});
+// or err = new Therror.ServerError[404]('The user ${user} does not exists', {user: 'Sarah'})
 
 res.statusCode(err.statusCode) // 404
 res.json(err.toPayload())
