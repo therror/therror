@@ -577,6 +577,7 @@ describe('Therror', function() {
 
       let err = new Therror.ServerError.NotFound('The user ${user} does not exists', {user: 'Sarah'});
 
+      expect(Therror.ServerError[404]).to.be.equal(Therror.ServerError.NotFound);
       expect(err.statusCode).to.be.eql(404);
       expect(err.message).to.be.eql('The user Sarah does not exists');
       expect(err.level()).to.be.eql('info');

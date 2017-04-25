@@ -350,45 +350,123 @@ declare namespace Mixins {
          * ```
          */
         <T extends Constructor<{}>>(opts?: ServerErrorOptions, Base?: T): Constructor<Classes.ServerError & Therror> & T;
+
         BadRequest: typeof ServerErrors.BadRequest;
+        400: typeof ServerErrors.BadRequest;
+
         Unauthorized: typeof ServerErrors.Unauthorized;
+        401: typeof ServerErrors.Unauthorized;
+
         PaymentRequired: typeof ServerErrors.PaymentRequired;
+        402: typeof ServerErrors.PaymentRequired;
+
         Forbidden: typeof ServerErrors.Forbidden;
+        403: typeof ServerErrors.Forbidden;
+
         NotFound: typeof ServerErrors.NotFound;
+        404: typeof ServerErrors.NotFound;
+
         MethodNotAllowed: typeof ServerErrors.MethodNotAllowed;
+        405: typeof ServerErrors.MethodNotAllowed;
+
         NotAcceptable: typeof ServerErrors.NotAcceptable;
+        406: typeof ServerErrors.NotAcceptable;
+
         ProxyAuthenticationRequired: typeof ServerErrors.ProxyAuthenticationRequired;
+        407: typeof ServerErrors.ProxyAuthenticationRequired;
+
         RequestTimeout: typeof ServerErrors.RequestTimeout;
+        408: typeof ServerErrors.RequestTimeout;
+
         Conflict: typeof ServerErrors.Conflict;
+        409: typeof ServerErrors.Conflict;
+
         Gone: typeof ServerErrors.Gone;
+        410: typeof ServerErrors.Gone;
+
         LengthRequired: typeof ServerErrors.LengthRequired;
+        411: typeof ServerErrors.LengthRequired;
+
         PreconditionFailed: typeof ServerErrors.PreconditionFailed;
+        412: typeof ServerErrors.PreconditionFailed;
+
         RequestEntityTooLarge: typeof ServerErrors.RequestEntityTooLarge;
+        413: typeof ServerErrors.RequestEntityTooLarge;
+
         RequestUriTooLarge: typeof ServerErrors.RequestUriTooLarge;
+        414: typeof ServerErrors.RequestUriTooLarge;
+
         UnsupportedMediaType: typeof ServerErrors.UnsupportedMediaType;
+        415: typeof ServerErrors.UnsupportedMediaType;
+
         RequestedRangeNotSatisfiable: typeof ServerErrors.RequestedRangeNotSatisfiable;
+        416: typeof ServerErrors.RequestedRangeNotSatisfiable;
+
         ExpectationFailed: typeof ServerErrors.ExpectationFailed;
+        417: typeof ServerErrors.ExpectationFailed;
+
         ImATeapot: typeof ServerErrors.ImATeapot;
+        418: typeof ServerErrors.ImATeapot;
+
         UnprocessableEntity: typeof ServerErrors.UnprocessableEntity;
+        422: typeof ServerErrors.UnprocessableEntity;
+
         Locked: typeof ServerErrors.Locked;
+        423: typeof ServerErrors.Locked;
+
         FailedDependency: typeof ServerErrors.FailedDependency;
+        424: typeof ServerErrors.FailedDependency;
+
         UnorderedCollection: typeof ServerErrors.UnorderedCollection;
+        425: typeof ServerErrors.UnorderedCollection;
+
         UpgradeRequired: typeof ServerErrors.UpgradeRequired;
+        426: typeof ServerErrors.UpgradeRequired;
+
         PreconditionRequired: typeof ServerErrors.PreconditionRequired;
+        428: typeof ServerErrors.PreconditionRequired;
+
         TooManyRequests: typeof ServerErrors.TooManyRequests;
+        429: typeof ServerErrors.TooManyRequests;
+
         RequestHeaderFieldsTooLarge: typeof ServerErrors.RequestHeaderFieldsTooLarge;
+        431: typeof ServerErrors.RequestHeaderFieldsTooLarge;
+
         UnavailableForLegalReasons: typeof ServerErrors.UnavailableForLegalReasons;
+        451: typeof ServerErrors.UnavailableForLegalReasons;
+
         InternalServerError: typeof ServerErrors.InternalServerError;
+        500: typeof ServerErrors.InternalServerError;
+
         NotImplemented: typeof ServerErrors.NotImplemented;
+        501: typeof ServerErrors.NotImplemented;
+
         BadGateway: typeof ServerErrors.BadGateway;
+        502: typeof ServerErrors.BadGateway;
+
         ServiceUnavailable: typeof ServerErrors.ServiceUnavailable;
+        503: typeof ServerErrors.ServiceUnavailable;
+
         GatewayTimeout: typeof ServerErrors.GatewayTimeout;
+        504: typeof ServerErrors.GatewayTimeout;
+
         HttpVersionNotSupported: typeof ServerErrors.HttpVersionNotSupported;
+        505: typeof ServerErrors.HttpVersionNotSupported;
+
         VariantAlsoNegotiates: typeof ServerErrors.VariantAlsoNegotiates;
+        506: typeof ServerErrors.VariantAlsoNegotiates;
+
         InsufficientStorage: typeof ServerErrors.InsufficientStorage;
+        507: typeof ServerErrors.InsufficientStorage;
+
         BandwidthLimitExceeded: typeof ServerErrors.BandwidthLimitExceeded;
+        509: typeof ServerErrors.BandwidthLimitExceeded;
+
         NotExtended: typeof ServerErrors.NotExtended;
+        510: typeof ServerErrors.NotExtended;
+
         NetworkAuthenticationRequired: typeof ServerErrors.NetworkAuthenticationRequired;
+        511: typeof ServerErrors.NetworkAuthenticationRequired;
     }
 
     namespace ServerErrors {
