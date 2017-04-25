@@ -460,7 +460,6 @@ describe('Therror', function() {
       });
     });
 
-
     it('should hide information to the client', function() {
 
       class ServiceUnavailable extends Therror.HTTP(503) {}
@@ -517,6 +516,17 @@ describe('Therror', function() {
         message: 'An internal server error occurred'
       });
     });
+
+    it('should use with cause message when no specific message specified', function() {
+      let cause = new Error('Causer error');
+      class ServerError extends Therror.HTTP() {}
+
+      let err = new ServerError(cause);
+
+      expect(err.cause()).to.be.eql(cause);
+      expect(err.message).to.be.eql('Causer error');
+
+    });
   });
 
   describe('when using ServerError', function () {
@@ -531,7 +541,7 @@ describe('Therror', function() {
         message: 'The user is ${user}'
       }) {}
 
-      let cause = new Therror();
+      let cause = new Therror('Causer Error');
 
       let err = new MyError(cause, {user: 'John'});
 
@@ -545,13 +555,21 @@ describe('Therror', function() {
 
     it('should use defaults', function() {
       class MyError extends Therror.ServerError() {}
-      let cause = new Therror();
-      let err = new MyError(cause, {user: 'John'});
+      let err = new MyError({user: 'John'});
 
       expect(err.user).to.be.eql('John');
-      expect(err.cause()).to.be.eql(cause);
       expect(err.message).to.be.eql('Internal Server Error');
       expect(err.level()).to.be.eql('error');
+      expect(err.statusCode).to.be.eql(500);
+    });
+
+    it('should use causer error as message when provided', function() {
+      class MyError extends Therror.ServerError() {}
+      let cause = new Therror('Causer error');
+      let err = new MyError(cause, {user: 'John'});
+
+      expect(err.cause()).to.be.eql(cause);
+      expect(err.message).to.be.eql('Causer error');
       expect(err.statusCode).to.be.eql(500);
     });
 
