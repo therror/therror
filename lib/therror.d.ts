@@ -37,7 +37,7 @@ interface Therror extends Error {
     parse(tpl: string): string;
 }
 
-interface TherrorConstructor<T> {
+export interface TherrorConstructor<T> {
     /**
      * Create a Therror with the provided message
      */
