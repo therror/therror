@@ -45,6 +45,8 @@ class My404 extends Therror.HTTP(404) {}
 class My503 extends Therror.HTTP('503') {}
 let my404 = new My404();
 my404.toPayload();
+my404.getPayloadErrorName();
+my404.getPayloadMessage();
 my404.statusCode;
 
 class MyCustomServerError extends Therror.ServerError({
@@ -55,6 +57,8 @@ class MyCustomServerError extends Therror.ServerError({
 class MyServerError extends Therror.ServerError() {}
 let myServerError = new MyServerError();
 myServerError.toPayload();
+myServerError.getPayloadErrorName();
+myServerError.getPayloadMessage();
 myServerError.statusCode;
 myServerError.log();
 myServerError.level;

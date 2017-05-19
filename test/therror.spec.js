@@ -470,8 +470,8 @@ describe('Therror', function() {
       expect(err.name).to.be.eql('ServiceUnavailable');
       expect(err.message).to.be.eql('Database mongo misconfigured');
       expect(err.toPayload()).to.be.eql({
-        error: 'InternalServerError',
-        message: 'An internal server error occurred'
+        error: 'ServiceUnavailable',
+        message: 'Service Unavailable'
       });
     });
 
@@ -487,12 +487,12 @@ describe('Therror', function() {
 
       expect(err.toPayload()).to.be.eql({
         error: 'InternalServerError',
-        message: 'An internal server error occurred'
+        message: 'Internal Server Error'
       });
 
       expect(err2.toPayload()).to.be.eql({
         error: 'InternalServerError',
-        message: 'An internal server error occurred'
+        message: 'Internal Server Error'
       });
     });
 
@@ -508,12 +508,12 @@ describe('Therror', function() {
 
       expect(err.toPayload()).to.be.eql({
         error: 'InternalServerError',
-        message: 'An internal server error occurred'
+        message: 'Internal Server Error'
       });
 
       expect(err2.toPayload()).to.be.eql({
         error: 'InternalServerError',
-        message: 'An internal server error occurred'
+        message: 'Internal Server Error'
       });
     });
 
@@ -603,8 +603,8 @@ describe('Therror', function() {
       expect(err.name).to.be.eql('ServiceUnavailable');
       expect(err.message).to.be.eql('Database mongo misconfigured');
       expect(err.toPayload()).to.be.eql({
-        error: 'InternalServerError',
-        message: 'An internal server error occurred'
+        error: 'ServiceUnavailable',
+        message: 'Service Unavailable'
       });
     });
 
@@ -616,8 +616,8 @@ describe('Therror', function() {
       expect(err.name).to.be.eql('ServiceUnavailable');
       expect(err.message).to.be.eql('3rd party error');
       expect(err.toPayload()).to.be.eql({
-        error: 'InternalServerError',
-        message: 'An internal server error occurred'
+        error: 'ServiceUnavailable',
+        message: 'Service Unavailable'
       });
     });
 
@@ -630,8 +630,8 @@ describe('Therror', function() {
       expect(err.message).to.be.eql('uncaught error');
       expect(err.cause()).to.be.eql(cause);
       expect(err.toPayload()).to.be.eql({
-        error: 'InternalServerError',
-        message: 'An internal server error occurred'
+        error: 'ServiceUnavailable',
+        message: 'Service Unavailable'
       });
     });
 
@@ -643,8 +643,8 @@ describe('Therror', function() {
       expect(err.name).to.be.eql('ServiceUnavailable');
       expect(err.message).to.be.eql(String(cause));
       expect(err.toPayload()).to.be.eql({
-        error: 'InternalServerError',
-        message: 'An internal server error occurred'
+        error: 'ServiceUnavailable',
+        message: 'Service Unavailable'
       });
     });
 
@@ -657,8 +657,8 @@ describe('Therror', function() {
       expect(err.message).to.be.eql('uncaught error');
       expect(err.cause()).to.be.eql(cause);
       expect(err.toPayload()).to.be.eql({
-        error: 'InternalServerError',
-        message: 'An internal server error occurred'
+        error: 'ServiceUnavailable',
+        message: 'Service Unavailable'
       });
     });
   });

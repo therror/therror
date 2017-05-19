@@ -180,6 +180,20 @@ export declare namespace Classes {
          * having the original properties untouched to log the error as it was defined
          */
         toPayload(): Properties;
+
+        /**
+         * Gets the message that will be sent to the user
+         * When the `statusCode` is >= 500, will return a generic message to hide implementation
+         * details to the user
+         */
+        getPayloadMessage(): string;
+
+        /**
+         * Gets the error name that will be sent to the user
+         * When the `statusCode` is >= 500, will return a generic name to hide implementation
+         * details to the user
+         */
+        getPayloadErrorName(): string;
     }
     export class HTTP implements HTTP {}
 
