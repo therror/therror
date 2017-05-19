@@ -117,8 +117,8 @@ console.log(err); // [ServiceUnavailable: BD Misconfigured]
 res.statusCode(err.statusCode) // 503
 res.json(err.toPayload())
 // {
-//    error: 'InternalServerError',
-//    message: 'An internal server error occurred'
+//    error: 'ServiceUnavailable',
+//    message: 'Service Unavailable'
 // }
 ```
 
