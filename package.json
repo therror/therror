@@ -1,7 +1,7 @@
 {
   "name": "therror",
   "description": "Create, document, customize and throw node errors easily",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "homepage": "https://therror.github.io/therror",
   "author": {
     "name": "Javier Mendiara Cañardo",
@@ -17,7 +17,7 @@
   "main": "lib/therror",
   "typings": "./lib/therror.d.ts",
   "engines": {
-    "node": ">=4"
+    "node": ">=4 <8"
   },
   "scripts": {
     "travis": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec test/environment.js 'test/**/*.spec.js' && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage && tsc --noEmit",
