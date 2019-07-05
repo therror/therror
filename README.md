@@ -2,7 +2,7 @@
 
 therror is a library created for making node error management easy, customizable, interoperable and documentable.
 
-It's written in ES6, for node >= 4 
+It's written in ES6, for node >= 4
 
 [![npm version](https://badge.fury.io/js/therror.svg)](http://badge.fury.io/js/therror)
 [![Build Status](https://travis-ci.org/therror/therror.svg)](https://travis-ci.org/therror/therror)
@@ -10,24 +10,26 @@ It's written in ES6, for node >= 4
 ![Typescript definitions](https://img.shields.io/badge/TypeScript%20Definition-.d.ts-blue.svg)
 
 Therror errors are [javascript errors](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Error)
-with sugar. You can use this library to create your application or library errors, and maintain fully interoperability with 
+with sugar. You can use this library to create your application or library errors, and maintain fully interoperability with
 others code.
 
-The _sugar_ is: 
- * __variables__: Add runtime information to your error messages
- * __extensibility__: Pure javascript Error classes with easy [ES6 mixins](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Mix-ins) support
- * __nesting__: Add the parent cause to your library errors
- * __notifications__: Subscribe to events when an error is created: Log them in a single place.
- * __internationalization__: Easy to hook your own i18n library to translate error messages
- * __predefined http errors__: Standard HTTP Error classes for quick programming
+The _sugar_ is:
+
+- **variables**: Add runtime information to your error messages
+- **extensibility**: Pure javascript Error classes with easy [ES6 mixins](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Mix-ins) support
+- **nesting**: Add the parent cause to your library errors
+- **notifications**: Subscribe to events when an error is created: Log them in a single place.
+- **internationalization**: Easy to hook your own i18n library to translate error messages
+- **predefined http errors**: Standard HTTP Error classes for quick programming
 
 With the help of their [peer projects](#peer-projects), you will have the opportunity to create a set of documents in various formats to
 satisfy the needs of several teams (operations, delivery, final users, developers, ...) but only maintaining one documentation in
-the best place ever: _your source code_. 
+the best place ever: _your source code_.
 
 [Try therror online](https://tonicdev.com/npm/therror)
 
-## Installation 
+## Installation
+
 ```bash
  npm install --save therror
 ```
@@ -37,7 +39,7 @@ the best place ever: _your source code_.
 ```js
 const Therror = require('therror');
 
-// Extend Therror to create your own classes 
+// Extend Therror to create your own classes
 class InvalidParamError extends Therror {}
 
 try {
@@ -53,11 +55,12 @@ try {
 ```
 
 ### Create your own errors
+
 ```js
 const Therror = require('therror');
 
 class InvalidParamError extends Therror {
-  constructor(props) { 
+  constructor(props) {
     super(props);
     // Define the message in the class to not specify it in their instances
     this.message = '${value} is not valid value for ${id}';
@@ -65,43 +68,48 @@ class InvalidParamError extends Therror {
   }
 }
 
-let err = new InvalidParamError({value: 12, id: 'offset'});
+let err = new InvalidParamError({ value: 12, id: 'offset' });
 console.log(err);
 // { [InvalidParamError: 12 is not valid value for offset] value: 12, id: 'offset', statusCode: 400 }
 ```
 
-### Adding error causes 
+### Adding error causes
+
 ```js
 const Therror = require('therror');
 
 try {
   throw new Error('3rd Party error');
-} catch(err) {
+} catch (err) {
   let catchedError = new Therror(err, 'There was a problem with 3rd Party');
   console.log(catchedError.cause());
   // [Error: 3rd Party error]
 }
 ```
+
 You can also use [logops](https://github.com/telefonicaid/logops), an error friendly logger that incorporates support off the shell for printing error causes.
 
 ### Server Error classes
-Common use case for your Server Errors. 
+
+Common use case for your Server Errors.
 
 Includes `Therror.Notificator`, `Therror.Loggable`, `Therror.WithMessage` and `Therror.HTTP` mixins. If you are using express, [therror-connect](https://github.com/therror/therror-connect) error handler might be useful
 
 ```js
-let err = new Therror.ServerError.NotFound('The user ${user} does not exists', {user: 'Sarah'});
+let err = new Therror.ServerError.NotFound('The user ${user} does not exists', {
+  user: 'Sarah'
+});
 // or err = new Therror.ServerError[404]('The user ${user} does not exists', {user: 'Sarah'})
 
-res.statusCode(err.statusCode) // 404
-res.json(err.toPayload())
+res.statusCode(err.statusCode); // 404
+res.json(err.toPayload());
 // {
 //    error: 'NotFound',
 //    message: 'The user Sarah does not exists'
 // }
 ```
 
-`toPayload()` method is meant to get the final response to the client. 
+`toPayload()` method is meant to get the final response to the client.
 When the error `statusCode >= 500`, it will set in the payload response
 a generic response to hide the implementation details to the user, while
 having the original properties untouched to log the error as it was defined
@@ -114,8 +122,8 @@ let err = new Therror.ServerError.ServiceUnavailable('BD Misconfigured');
 console.log(err); // [ServiceUnavailable: BD Misconfigured]
 
 // but send a hidden response to the client (Express example)
-res.statusCode(err.statusCode) // 503
-res.json(err.toPayload())
+res.statusCode(err.statusCode); // 503
+res.json(err.toPayload());
 // {
 //    error: 'ServiceUnavailable',
 //    message: 'Service Unavailable'
@@ -123,17 +131,19 @@ res.json(err.toPayload())
 ```
 
 Create your own
+
 ```js
 class UserNotFound extends Therror.ServerError({
   message: 'User ${username} does not exists',
   level: 'info',
   statusCode: 404
-}){}
+}) {}
 
-let error =  new UserNotFound({username: 'John Doe'});
+let error = new UserNotFound({ username: 'John Doe' });
 ```
 
 The following classes have been defined in `Therror.ServerError`
+
 ```js
 {
      '400': 'BadRequest',
@@ -174,24 +184,25 @@ The following classes have been defined in `Therror.ServerError`
      '507': 'InsufficientStorage',
      '509': 'BandwidthLimitExceeded',
      '510': 'NotExtended',
-     '511': 'NetworkAuthenticationRequired' 
+     '511': 'NetworkAuthenticationRequired'
 }
 ```
 
 ### Internationalization
+
 ```js
 const Therror = require('therror');
 
 // Will be parsed by `therror-doc` and store the message for you in a JSON, ready for use your own i18n library (WIP)
 class InvalidParamError extends Therror {
-  constructor(props) { 
+  constructor(props) {
     super(props);
     this.message = '${value} is not valid value for ${id}';
   }
 }
 
 try {
-  throw new InvalidParamError({value: 12, id: 'offset'});
+  throw new InvalidParamError({ value: 12, id: 'offset' });
 } catch (err) {
   //i18n is your prefered library
   //err.name === InvalidParamError
@@ -202,6 +213,7 @@ try {
 ```
 
 ### Bluebird ready
+
 ```js
 const Therror = require('therror');
 const Promise = require('bluebird');
@@ -209,43 +221,50 @@ const Promise = require('bluebird');
 class InvalidParamError extends Therror {}
 
 Promise.try(() => {
-   throw new InvalidParamError('Invalid parameter');
- })
- .catch(InvalidParamError, err => {
-   // ...
- });
+  throw new InvalidParamError('Invalid parameter');
+}).catch(InvalidParamError, err => {
+  // ...
+});
 ```
 
 ### Add functionality to your errors by [using mixins](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes#Mix-ins)
 
 #### Shared messages across all instances
+
 DRY. Rehuse the errors customizing only metadata
+
 ```js
 const Therror = require('therror');
 
-class NotFoundError extends Therror.WithMessage('The user ${user} does not exists') {}
+class NotFoundError extends Therror.WithMessage(
+  'The user ${user} does not exists'
+) {}
 
-let error = new UserNotFoundError({user: 'John'});
+let error = new UserNotFoundError({ user: 'John' });
 
 // { [UserNotFoundError: The user John does not exists] }
 
-let error2 = new UserNotFoundError(error, {user: 'Sarah'});
+let error2 = new UserNotFoundError(error, { user: 'Sarah' });
 
 // { [UserNotFoundError: The user Sarah does not exists] }
 ```
 
 #### Custom HTTP Errors
+
 Be expressive with your Server errors
+
 ```js
 const Therror = require('therror');
 
 class UserNotFound extends Therror.HTTP('404') {}
 
-let err = new UserNotFound('The user ${user} does not exists', {user: 'Sarah'});
+let err = new UserNotFound('The user ${user} does not exists', {
+  user: 'Sarah'
+});
 
 // Send the response (Express example)
-res.statusCode(err.statusCode) // 404
-res.json(err.toPayload())
+res.statusCode(err.statusCode); // 404
+res.json(err.toPayload());
 // {
 //    error: 'UserNotFound',
 //    message: 'The user Sarah does not exists'
@@ -258,8 +277,8 @@ let err = new DatabaseError(cause, 'BD Misconfigured');
 console.log(err); // [DatabaseError: BD Misconfigured]
 
 // Send a hidden response to the client (Express example)
-res.statusCode(err.statusCode) // 503
-res.json(err.toPayload())
+res.statusCode(err.statusCode); // 503
+res.json(err.toPayload());
 // {
 //    error: 'InternalServerError',
 //    message: 'An internal server error occurred'
@@ -267,7 +286,9 @@ res.json(err.toPayload())
 ```
 
 #### Serializing your errors
-For easy logging and server returning using [serr](https://github.com/therror/serr).  
+
+For easy logging and server returning using [serr](https://github.com/therror/serr).
+
 ```js
 const Therror = require('therror');
 
@@ -287,10 +308,13 @@ console.log('%s', error);
 console.log('%j', error);
 // {"message":"Something went wrong","name":"FatalError","constructor":"FatalError","causes":[{"message":"ENOENT","name":"Error","constructor":"Error"}]}
 ```
+
 You can also use [logops](https://github.com/telefonicaid/logops), an error friendly logger that incorporates support off the shell for this functionality.
 
 #### Notifications
+
 Never miss again a log trace when creating Errors
+
 ```js
 const Therror = require('therror');
 
@@ -305,7 +329,9 @@ let fatal = new FatalError('This is immediately logged');
 ```
 
 #### Logging levels
+
 Cause not all errors have the same severity. Preconfigure them with it
+
 ```js
 const Therror = require('therror');
 
@@ -323,9 +349,11 @@ notFound.log();
 notFound.level();
 // info
 ```
- 
+
 #### Namespacing your errors
-For easy identification in logs and tests using `err.name` 
+
+For easy identification in logs and tests using `err.name`
+
 ```js
 const Therror = require('therror');
 
@@ -337,15 +365,17 @@ console.log(err);
 // [Server.InvalidParamError: Not a valid parameter]
 ```
 
-### Change the template library  
+### Change the template library
+
 Therror ships [lodash template](https://lodash.com/docs#template) system to allow you adding runtime variables to the final error message.
 
 More info: `Therror.parse()`
 
 ## Peer Projects
-* [therror-connect](https://github.com/therror/therror-connect): Connect/Express error handler
-* [therror-doc](https://github.com/therror/therror-doc): Documentation parser for therror (WIP)
-* [serr](https://github.com/therror/serr): Error serializer to Objects and Strings
+
+- [therror-connect](https://github.com/therror/therror-connect): Connect/Express error handler
+- [therror-doc](https://github.com/therror/therror-doc): Documentation parser for therror (WIP)
+- [serr](https://github.com/therror/serr): Error serializer to Objects and Strings
 
 ## LICENSE
 

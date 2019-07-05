@@ -112,7 +112,6 @@ describe('Therror', function() {
   });
 
   describe('when specifying properties in the instantiation', function() {
-
     it('should support adding properties to the error instance', function() {
       let err = new Therror('Something happened', {
         what: 'socks',
@@ -124,9 +123,10 @@ describe('Therror', function() {
     });
 
     it('should support adding several properties objs to the error instance ', function() {
-      let err = new Therror('Something happened',
-          {what: 'socks'},
-          {color: 'blue'}
+      let err = new Therror(
+        'Something happened',
+        { what: 'socks' },
+        { color: 'blue' }
       );
 
       expect(err.what).to.be.eql('socks');
@@ -189,7 +189,6 @@ describe('Therror', function() {
       expect(err.message).to.be.eql('My blue socks');
       expect(message).to.be.eql('Mis socks blue');
     });
-
   });
 
   describe('when extending Therror', function() {
@@ -214,7 +213,7 @@ describe('Therror', function() {
         }
       }
 
-      let err = new MyError({type: 'bad'});
+      let err = new MyError({ type: 'bad' });
 
       expect(err.message).to.be.eql('Something bad: 500');
       expect(err.statusCode).to.be.eql(500);
@@ -223,14 +222,17 @@ describe('Therror', function() {
     it('should be able to customize using multiple properties', function() {
       class MyError extends Therror {
         constructor(data) {
-          super({
-            message: 'Something ${type}: ${statusCode}',
-            statusCode: 500
-          }, data);
+          super(
+            {
+              message: 'Something ${type}: ${statusCode}',
+              statusCode: 500
+            },
+            data
+          );
         }
       }
 
-      let err = new MyError({type: 'bad'});
+      let err = new MyError({ type: 'bad' });
 
       expect(err.message).to.be.eql('Something bad: 500');
       expect(err.statusCode).to.be.eql(500);
@@ -245,7 +247,7 @@ describe('Therror', function() {
         }
       }
 
-      let err = new MyError({type: 'bad'});
+      let err = new MyError({ type: 'bad' });
 
       expect(err.message).to.be.eql('Something bad: 500');
       expect(err.statusCode).to.be.eql(500);
@@ -259,7 +261,9 @@ describe('Therror', function() {
         }
       }
 
-      let err = new MyError('Something ${type}: ${statusCode}', {type: 'bad'});
+      let err = new MyError('Something ${type}: ${statusCode}', {
+        type: 'bad'
+      });
 
       expect(err.message).to.be.eql('Something bad: 500');
       expect(err.statusCode).to.be.eql(500);
@@ -268,7 +272,7 @@ describe('Therror', function() {
 
   describe('when using mixins', function() {
     function JSONTherror(Base) {
-      return class extends(Base) {
+      return class extends Base {
         toJSON() {
           return {
             name: this.name,
@@ -290,7 +294,7 @@ describe('Therror', function() {
     it('should be able to extend classes', function() {
       class MyJSONTherror extends JSONTherror(URLTherror(Therror)) {}
 
-      var err = new MyJSONTherror('Mixins are ${what}', {what: 'cool'});
+      var err = new MyJSONTherror('Mixins are ${what}', { what: 'cool' });
 
       expect(err).to.be.instanceOf(Error);
       expect(err).to.be.instanceOf(Therror);
@@ -308,10 +312,9 @@ describe('Therror', function() {
 
   describe('when using Namespaced', function() {
     it('should be able to specify the Namespace on class creation', function() {
-
       class MyError extends Therror.Namespaced('Server') {}
 
-      let err = new MyError('What a ${what}', {what: 'pitty'});
+      let err = new MyError('What a ${what}', { what: 'pitty' });
 
       expect(err).to.be.instanceOf(Error);
       expect(err).to.be.instanceOf(Therror);
@@ -326,10 +329,9 @@ describe('Therror', function() {
 
   describe('when using Serializable', function() {
     it('should have serializable methods', function() {
-
       class MyError extends Therror.Serializable() {}
 
-      let err = new MyError('What a ${what}', {what: 'pitty'});
+      let err = new MyError('What a ${what}', { what: 'pitty' });
 
       expect(err).to.be.instanceOf(Error);
       expect(err).to.be.instanceOf(Therror);
@@ -342,7 +344,7 @@ describe('Therror', function() {
     });
   });
 
-  describe('when using Notificator', function () {
+  describe('when using Notificator', function() {
     it('should receive an event when a Therror is instantiated', function() {
       let eventSpy = sandbox.spy();
       Therror.on('create', eventSpy);
@@ -355,13 +357,13 @@ describe('Therror', function() {
     });
   });
 
-  describe('when using Loggable', function () {
-    it('should have a log method', function () {
+  describe('when using Loggable', function() {
+    it('should have a log method', function() {
       let logger = {
         info: sandbox.spy()
       };
 
-      class MyError extends Therror.Loggable('info') { }
+      class MyError extends Therror.Loggable('info') {}
 
       let err = new MyError('What a ${what}', { what: 'pitty' });
 
@@ -382,7 +384,7 @@ describe('Therror', function() {
       expect(logger.info).to.have.been.calledWith(err);
     });
 
-    it('should use req.logger if present', function () {
+    it('should use req.logger if present', function() {
       let logger = {
         info: sandbox.spy()
       };
@@ -390,11 +392,11 @@ describe('Therror', function() {
         logger: logger
       };
 
-      class MyError extends Therror.Loggable('info') { }
+      class MyError extends Therror.Loggable('info') {}
 
       let err = new MyError('What a ${what}', { what: 'pitty' });
 
-      err.log({req: req});
+      err.log({ req: req });
 
       expect(logger.info).to.have.been.calledWith(err);
     });
@@ -406,19 +408,20 @@ describe('Therror', function() {
 
       class MyError extends Therror.Loggable() {}
 
-      let err = new MyError('What a ${what}', {what: 'pitty'});
+      let err = new MyError('What a ${what}', { what: 'pitty' });
 
       expect(err.level()).to.be.eql('error');
     });
   });
 
-  describe('when using WithMessage', function () {
+  describe('when using WithMessage', function() {
     it('should have common message for all instances', function() {
+      class MyError extends Therror.WithMessage(
+        'The user ${user} does not exists'
+      ) {}
 
-      class MyError extends Therror.WithMessage('The user ${user} does not exists') {}
-
-      let err = new MyError({user: 'John'});
-      let err2 = new MyError(err, {user: 'Sarah'});
+      let err = new MyError({ user: 'John' });
+      let err2 = new MyError(err, { user: 'Sarah' });
 
       expect(err.message).to.be.eql('The user John does not exists');
       expect(err2.message).to.be.eql('The user Sarah does not exists');
@@ -426,11 +429,16 @@ describe('Therror', function() {
     });
 
     it('should be able to overwrite the predefined message', function() {
+      class MyError extends Therror.WithMessage(
+        'The user ${user} does not exists'
+      ) {}
 
-      class MyError extends Therror.WithMessage('The user ${user} does not exists') {}
-
-      let err = new MyError('Overwritten message for ${user}', {user: 'John'});
-      let err2 = new MyError(err, 'Another message for ${user}', {user: 'Sarah'});
+      let err = new MyError('Overwritten message for ${user}', {
+        user: 'John'
+      });
+      let err2 = new MyError(err, 'Another message for ${user}', {
+        user: 'Sarah'
+      });
 
       expect(err.message).to.be.eql('Overwritten message for John');
       expect(err2.message).to.be.eql('Another message for Sarah');
@@ -438,9 +446,8 @@ describe('Therror', function() {
     });
   });
 
-  describe('when using HTTP', function () {
+  describe('when using HTTP', function() {
     it('should create with statusCodes', function() {
-
       class NotFound extends Therror.HTTP('404') {}
       class ServerError extends Therror.HTTP('500') {}
 
@@ -460,14 +467,14 @@ describe('Therror', function() {
 
       expect(err2.cause()).to.be.eql(err);
       expect(err2.message).to.be.eql('Boom!');
-
     });
 
     it('should create with custom message', function() {
-
       class UserNotFound extends Therror.HTTP('404') {}
 
-      let err = new UserNotFound('The user ${user} does not exists', {user: 'Sarah'});
+      let err = new UserNotFound('The user ${user} does not exists', {
+        user: 'Sarah'
+      });
 
       expect(err.statusCode).to.be.eql(404);
       expect(err.message).to.be.eql('The user Sarah does not exists');
@@ -478,10 +485,11 @@ describe('Therror', function() {
     });
 
     it('should hide information to the client', function() {
-
       class ServiceUnavailable extends Therror.HTTP(503) {}
 
-      let err = new ServiceUnavailable('Database ${type} misconfigured', {type: 'mongo'});
+      let err = new ServiceUnavailable('Database ${type} misconfigured', {
+        type: 'mongo'
+      });
 
       expect(err.statusCode).to.be.eql(503);
       expect(err.name).to.be.eql('ServiceUnavailable');
@@ -542,13 +550,11 @@ describe('Therror', function() {
 
       expect(err.cause()).to.be.eql(cause);
       expect(err.message).to.be.eql('Causer error');
-
     });
   });
 
-  describe('when using ServerError', function () {
+  describe('when using ServerError', function() {
     it('should have the four mixins', function() {
-
       let eventSpy = sandbox.spy();
       Therror.on('create', eventSpy);
 
@@ -560,7 +566,7 @@ describe('Therror', function() {
 
       let cause = new Therror('Causer Error');
 
-      let err = new MyError(cause, {user: 'John'});
+      let err = new MyError(cause, { user: 'John' });
 
       expect(err.user).to.be.eql('John');
       expect(err.cause()).to.be.eql(cause);
@@ -572,7 +578,7 @@ describe('Therror', function() {
 
     it('should use defaults', function() {
       class MyError extends Therror.ServerError() {}
-      let err = new MyError({user: 'John'});
+      let err = new MyError({ user: 'John' });
 
       expect(err.user).to.be.eql('John');
       expect(err.message).to.be.eql('Internal Server Error');
@@ -583,7 +589,7 @@ describe('Therror', function() {
     it('should use causer error as message when provided', function() {
       class MyError extends Therror.ServerError() {}
       let cause = new Therror('Causer error');
-      let err = new MyError(cause, {user: 'John'});
+      let err = new MyError(cause, { user: 'John' });
 
       expect(err.cause()).to.be.eql(cause);
       expect(err.message).to.be.eql('Causer error');
@@ -591,10 +597,14 @@ describe('Therror', function() {
     });
 
     it('should have precreated classes for statusCodes', function() {
+      let err = new Therror.ServerError.NotFound(
+        'The user ${user} does not exists',
+        { user: 'Sarah' }
+      );
 
-      let err = new Therror.ServerError.NotFound('The user ${user} does not exists', {user: 'Sarah'});
-
-      expect(Therror.ServerError[404]).to.be.equal(Therror.ServerError.NotFound);
+      expect(Therror.ServerError[404]).to.be.equal(
+        Therror.ServerError.NotFound
+      );
       expect(err.statusCode).to.be.eql(404);
       expect(err.message).to.be.eql('The user Sarah does not exists');
       expect(err.level()).to.be.eql('info');
@@ -602,11 +612,9 @@ describe('Therror', function() {
         error: 'NotFound',
         message: 'The user Sarah does not exists'
       });
-
     });
 
     it('should have error as level for precreated classes with statusCode > 500', function() {
-
       let err = new Therror.ServerError.InternalServerError();
 
       expect(err.statusCode).to.be.eql(500);
@@ -614,7 +622,10 @@ describe('Therror', function() {
     });
 
     it('should hide information to the client', function() {
-      let err = new Therror.ServerError.ServiceUnavailable('Database ${type} misconfigured', {type: 'mongo'});
+      let err = new Therror.ServerError.ServiceUnavailable(
+        'Database ${type} misconfigured',
+        { type: 'mongo' }
+      );
 
       expect(err.statusCode).to.be.eql(503);
       expect(err.name).to.be.eql('ServiceUnavailable');
@@ -640,7 +651,10 @@ describe('Therror', function() {
 
     it('should set string as cause for ServerError', function() {
       let cause = '3rd party error';
-      let err = new Therror.ServerError.ServiceUnavailable(cause, 'uncaught error');
+      let err = new Therror.ServerError.ServiceUnavailable(
+        cause,
+        'uncaught error'
+      );
 
       expect(err.statusCode).to.be.eql(503);
       expect(err.name).to.be.eql('ServiceUnavailable');
@@ -667,7 +681,10 @@ describe('Therror', function() {
 
     it('should set Number as cause for ServerError', function() {
       let cause = 1;
-      let err = new Therror.ServerError.ServiceUnavailable(cause, 'uncaught error');
+      let err = new Therror.ServerError.ServiceUnavailable(
+        cause,
+        'uncaught error'
+      );
 
       expect(err.statusCode).to.be.eql(503);
       expect(err.name).to.be.eql('ServiceUnavailable');
