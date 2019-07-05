@@ -1,15 +1,15 @@
-var sinon = require ('sinon'),
-  chai = require ('chai'),
+var sinon = require('sinon'),
+  chai = require('chai'),
   sinonChai = require('sinon-chai');
 
 chai.use(sinonChai);
 
 global.expect = chai.expect;
 
-beforeEach(function(){
-  global.sandbox = sinon.sandbox.create();
+beforeEach(function() {
+  global.sandbox = sinon.createSandbox();
 });
 
-afterEach(function(){
+afterEach(function() {
   global.sandbox.restore();
 });

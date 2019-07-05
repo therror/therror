@@ -20,25 +20,29 @@
     "node": ">=4"
   },
   "scripts": {
-    "travis": "istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec test/environment.js 'test/**/*.spec.js' && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage && tsc --noEmit",
-    "coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- -R dot test/environment.js 'test/**/*.spec.js'",
-    "lint": "jscs lib && eslint lib && tslint './{lib,test}/**/*.ts'",
-    "test": "mocha -R spec test/environment.js 'test/**/*.spec.js' && npm run test:ts",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "lint": "eslint lib && tslint './{lib,test}/**/*.ts'",
+    "format": "prettier --write '{src,test,.}/**/*.{js,md}'",
+    "test": "nyc mocha -R spec test/environment.js 'test/**/*.spec.js' && npm run test:ts",
     "test:ts": "tsc --noEmit"
   },
+  "prettier": {
+    "semi": true,
+    "singleQuote": true
+  },
   "devDependencies": {
-    "@types/node": "^7.0.13",
-    "chai": "^4.0.0",
-    "coveralls": "^3.0.1",
-    "eslint": "^3.2.0",
-    "istanbul": "^0.4.2",
-    "jscs": "^3.0.3",
-    "mocha": "^5.2.0",
-    "sinon": "^5.1.0",
-    "sinon-chai": "^3.1.0",
-    "tslint": "^5.10.0",
-    "tslint-config-typings": "^0.3.1",
-    "typescript": "^2.3.0"
+    "@types/node": "12.0.12",
+    "chai": "4.2.0",
+    "coveralls": "3.0.4",
+    "eslint": "6.0.1",
+    "nyc": "14.1.1",
+    "mocha": "6.1.4",
+    "prettier": "1.18.2",
+    "sinon": "7.3.2",
+    "sinon-chai": "3.3.0",
+    "tslint": "5.18.0",
+    "tslint-config-typings": "0.3.1",
+    "typescript": "3.5.2"
   },
   "keywords": [
     "error",
@@ -50,7 +54,7 @@
   "license": "Apache-2.0",
   "tonicExampleFilename": "examples/tonicdev.js",
   "dependencies": {
-    "lodash": "^4.1.0",
-    "serr": "^1.0.0"
+    "lodash": "4.17.11",
+    "serr": "1.0.1"
   }
 }
