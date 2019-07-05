@@ -59,8 +59,8 @@ describe('Therror', function() {
       let err = new Therror(cause);
 
       expect(err.cause()).to.be.eql(cause);
-    });    
-    
+    });
+
     it('should be able to create a Therror with cause and use cause message when no one specified', function() {
       let cause = new Error('Causer error');
       let err = new Therror(cause);
@@ -356,14 +356,14 @@ describe('Therror', function() {
   });
 
   describe('when using Loggable', function () {
-    it('should have a log method', function() {
+    it('should have a log method', function () {
       let logger = {
         info: sandbox.spy()
       };
 
-      class MyError extends Therror.Loggable('info') {}
+      class MyError extends Therror.Loggable('info') { }
 
-      let err = new MyError('What a ${what}', {what: 'pitty'});
+      let err = new MyError('What a ${what}', { what: 'pitty' });
 
       expect(err).to.be.instanceOf(Error);
       expect(err).to.be.instanceOf(Therror);
@@ -378,6 +378,23 @@ describe('Therror', function() {
       Therror.Loggable.logger = logger;
       err.log();
       Therror.Loggable.logger = console;
+
+      expect(logger.info).to.have.been.calledWith(err);
+    });
+
+    it('should use req.logger if present', function () {
+      let logger = {
+        info: sandbox.spy()
+      };
+      const req = {
+        logger: logger
+      };
+
+      class MyError extends Therror.Loggable('info') { }
+
+      let err = new MyError('What a ${what}', { what: 'pitty' });
+
+      err.log({req: req});
 
       expect(logger.info).to.have.been.calledWith(err);
     });
