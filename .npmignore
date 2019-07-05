@@ -18,3 +18,5 @@ typings.json
 CONTRIBUTING.md
 
 *.spec.js
+
+.nyc_output
