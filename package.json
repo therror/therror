@@ -31,18 +31,18 @@
     "singleQuote": true
   },
   "devDependencies": {
-    "@types/node": "12.0.12",
-    "chai": "4.2.0",
-    "coveralls": "3.0.4",
-    "eslint": "6.0.1",
-    "nyc": "14.1.1",
-    "mocha": "6.1.4",
-    "prettier": "1.18.2",
-    "sinon": "7.3.2",
-    "sinon-chai": "3.3.0",
-    "tslint": "5.18.0",
-    "tslint-config-typings": "0.3.1",
-    "typescript": "3.5.2"
+    "@types/node": "^12.0.12",
+    "chai": "^4.2.0",
+    "coveralls": "^3.0.6",
+    "eslint": "^6.1.0",
+    "nyc": "^14.1.1",
+    "mocha": "^6.2.0",
+    "prettier": "^1.18.2",
+    "sinon": "^7.3.2",
+    "sinon-chai": "^3.3.0",
+    "tslint": "^5.18.0",
+    "tslint-config-typings": "^0.3.1",
+    "typescript": "^3.5.2"
   },
   "keywords": [
     "error",
@@ -54,7 +54,7 @@
   "license": "Apache-2.0",
   "tonicExampleFilename": "examples/tonicdev.js",
   "dependencies": {
-    "lodash": "4.17.11",
-    "serr": "1.0.1"
+    "lodash": "^4.17.15",
+    "serr": "^1.0.1"
   }
 }
